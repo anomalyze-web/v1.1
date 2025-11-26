@@ -3,14 +3,20 @@ import base64
 from streamlit_extras.stylable_container import stylable_container
 
 # Import the analysis modules
+# NOTE: These files (CDR_analysis, IPDR_analysis, etc.) must exist in the same directory
 from CDR_analysis import show_cdr_analysis
 from IPDR_analysis import show_ipdr_analysis
 from FIREWALL_analysis import show_firewall_analysis
 from CO_Relation_analysis import show_correlation_analysis
 
 def get_base64_image():
-    with open("logo1.png", "rb") as img_file:
-        return base64.b64encode(img_file.read()).decode()
+    # NOTE: This assumes 'logo1.png' is available
+    try:
+        with open("logo1.png", "rb") as img_file:
+            return base64.b64encode(img_file.read()).decode()
+    except FileNotFoundError:
+        st.error("Error: logo1.png not found for encoding.")
+        return ""
 
 def dashboard_css():
     st.markdown("""
@@ -72,7 +78,7 @@ def dashboard_css():
         font-size: 1.2rem;
     }
     .dashboard-main {
-        display:fle;
+        display:flex;
         justify-content: flex-end;
         margin-top: 5px;
         padding: 0 24px 24px 250px;
@@ -118,6 +124,8 @@ def dashboard_css():
     """, unsafe_allow_html=True)
 
 def dashboard(username):
+    # Set page config here to ensure the wide layout sticks
+    st.set_page_config(page_title="Anomalyze Dashboard", layout="wide")
     dashboard_css()
 
     if "page" not in st.session_state:
@@ -173,6 +181,7 @@ def dashboard(username):
             st.markdown('''
                 <div style="font-size: 2rem; font-weight: bold; color: #000; margin-bottom: 24px; background: white; padding: 16px 24px; border-radius: 12px;">
                     Upload a new case:
+                </div>
             ''', unsafe_allow_html=True)
 
             # CDR Button
@@ -203,7 +212,7 @@ def dashboard(username):
                     font-size: 1.2rem;
                     margin-bottom: 12px;
                     width: 100%;
-                   opacity:50%;
+                    opacity:50%;
                 }
             """):
                 if st.button("IPDR", key="ipdr"):
@@ -319,6 +328,3 @@ def dashboard(username):
         )
 
     st.markdown('</div>', unsafe_allow_html=True)
-
-if __name__ == "__main__" or "streamlit" in __name__:
-    dashboard("User Name")
