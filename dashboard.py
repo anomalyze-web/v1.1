@@ -2,50 +2,11 @@ import streamlit as st
 import base64
 from streamlit_extras.stylable_container import stylable_container
 
-# Import the analysis modules
-from CDR_analysis import show_cdr_analysis
-from IPDR_analysis import show_ipdr_analysis
-from FIREWALL_analysis import show_firewall_analysis # CORRECTED: Ensure show_firewall_analysis is imported from the right place
-from CO_Relation_analysis import show_correlation_analysis # Removed redundant import of show_firewall_analysis
-
-# --- Helper Functions (Page Views - Retained but stripped down) ---
-def show_evidence_library():
-    """Placeholder screen for Evidence Library."""
-    st.title("Evidence Library")
-    st.markdown("---")
-    if st.button("⬅ Back to Dashboard", key="elb"):
-        st.session_state.page = "main"
-        st.rerun()
-    st.markdown('<div style="color:white;">Evidence library content removed for simplicity.</div>', unsafe_allow_html=True)
-
-def show_search_cases():
-    """Placeholder screen for Search Cases."""
-    st.title("Search Historical Cases")
-    st.markdown("---")
-    if st.button("⬅ Back to Dashboard", key="scb"):
-        st.session_state.page = "main"
-        st.rerun()
-    st.markdown('<div style="color:white;">Search cases content removed for simplicity.</div>', unsafe_allow_html=True)
-
-def show_legal_reference():
-    """Placeholder screen for Legal Reference."""
-    st.title("Legal Reference and Standards")
-    st.markdown("---")
-    if st.button("⬅ Back to Dashboard", key="lrb"):
-        st.session_state.page = "main"
-        st.rerun()
-    st.markdown('<div style="color:white;">Legal reference content removed for simplicity.</div>', unsafe_allow_html=True)
-
-def show_new_case_selector():
-    """Selector for the specific type of case data to be uploaded."""
-    st.title("Select Data Type")
-    st.markdown("---")
-    if st.button("⬅ Back to Dashboard", key="ncsb"):
-        st.session_state.page = "main"
-        st.rerun()
-    st.markdown('<div style="color:white;">New case selector content removed for simplicity.</div>', unsafe_allow_html=True)
-
-# The complex form submission and analysis calls are temporarily commented out to ensure stability
+# Dummy functions to satisfy the import requirements from the login page
+def show_evidence_library(): pass
+def show_search_cases(): pass
+def show_legal_reference(): pass
+def show_new_case_selector(): pass
 def show_cdr_analysis(a, b, c, d): pass
 def show_ipdr_analysis(a, b, c, d): pass
 def show_firewall_analysis(a, b, c, d): pass
@@ -92,7 +53,7 @@ def dashboard_css():
         margin: 0;
     }
     
-    /* Remove Sidebar and all unnecessary containers */
+    /* Remove Sidebar */
     [data-testid="stSidebar"], [data-testid="stSidebarContent"] { display: none !important; }
     </style>
     """, unsafe_allow_html=True)
@@ -101,7 +62,7 @@ def dashboard(username):
     st.set_page_config(page_title="Anomalyze Dashboard", layout="wide")
     dashboard_css()
 
-    # --- Session State Initialization ---
+    # --- Session State Initialization (Required for login page logic) ---
     if "page" not in st.session_state:
         st.session_state.page = "main"
     if "form_submitted" not in st.session_state:
@@ -112,22 +73,5 @@ def dashboard(username):
     st.markdown('<div class="dashboard-title">Dashboard</div>', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
-    # --- Main Content Router (Placeholder to keep structure) ---
-    st.markdown(f'<div style="padding-top: 20px; color: white;">Current Page: {st.session_state.page}</div>', unsafe_allow_html=True)
-    
-    # Placeholder to avoid errors
-    if st.session_state.page == "main":
-        st.write("Dashboard content will go here.")
-    elif st.session_state.page == "new_case_selector":
-        show_new_case_selector()
-    elif st.session_state.page == "evidence_library":
-        show_evidence_library()
-    elif st.session_state.page == "search_cases":
-        show_search_cases()
-    elif st.session_state.page == "legal_reference":
-        show_legal_reference()
-    # Placeholder for the actual forms and analysis pages (to prevent errors)
-    elif st.session_state.page in ["cdr", "ipdr", "firewall", "correlation"]:
-        st.markdown('<div style="color:white;">Case upload forms disabled for current simplified view.</div>', unsafe_allow_html=True)
-    elif st.session_state.page in ["cdr_analysis", "ipdr_analysis", "firewall_analysis", "correlation_analysis"]:
-        st.markdown('<div style="color:white;">Analysis pages disabled for current simplified view.</div>', unsafe_allow_html=True)
+    # The main content area is now intentionally blank
+    st.markdown('<div style="height: 500px;"></div>', unsafe_allow_html=True)
