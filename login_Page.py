@@ -1,7 +1,7 @@
 import streamlit as st
 import sqlite3
 import bcrypt
-from dashboard import dashboard  # CORRECT: Import the actual dashboard function
+from dashboard import dashboard  # Correctly imports the actual dashboard function
 
 # --- SESSION STATE INITIALIZATION ---
 if "logged_in" not in st.session_state:
@@ -75,6 +75,7 @@ body, [data-testid="stAppViewContainer"], .main {
 .left-panel-custom {
     background-color: #367588; /* Dark Turquoise/Teal */
     border-radius: 24px;
+    /* Use padding to control height, centering content */
     padding: 70px 30px; 
     width: 100%; 
     box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
@@ -94,7 +95,7 @@ body, [data-testid="stAppViewContainer"], .main {
 /* Left Panel Title - Text Color changed to #15425b (Dark Blue) */
 .left-panel-title {
     color: #15425b; /* Dark blue text on dark turquoise background */
-    font-size: 4.5rem; /* Reduced size slightly to guarantee fit and centering */
+    font-size: 4.5rem; /* Large size to fill space */
     font-weight: bold;
     text-align: center;
     line-height: 1.1;
