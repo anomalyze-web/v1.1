@@ -65,7 +65,16 @@ def dashboard_css():
         justify-content: flex-start;
         align-items: center;
         gap: 15px;
+        height: 60px; /* Match container height */
     }
+    
+    /* Force inner content into a fixed flex row for tight spacing */
+    .user-actions-row {
+        display: flex;
+        align-items: center;
+        gap: 15px; /* Spacing between user info and logout button */
+    }
+
     .user-box {
         display: flex;
         align-items: center;
@@ -94,13 +103,14 @@ def dashboard_css():
         border-radius: 8px;
         font-size: 0.9rem;
         font-weight: 600;
-        width: fit-content; /* Force width to fit content */
+        width: fit-content; 
         min-width: unset; 
         padding: 5px 10px;
         height: 30px;
         transition: background-color 0.2s;
         border: none;
-        margin: 0; /* Important: Remove all margins/padding to stop pushing other elements */
+        margin: 0; /* Important: Remove all margins/padding */
+        line-height: 1.5; /* Vertical alignment fix */
     }
     [data-testid="stButton"][key="header_logout"] button:hover {
         background-color: #e57373; /* Light red hover for danger/logout */
@@ -109,11 +119,10 @@ def dashboard_css():
     /* Remove Sidebar */
     [data-testid="stSidebar"], [data-testid="stSidebarContent"] { display: none !important; }
 
-    /* Remove extra margin/padding from inner markdown elements */
+    /* Ensure inner markdown elements do not interfere with grid */
     #fixed-header-container p {
         margin: 0;
         padding: 0;
-        /* Ensure that the containing markdown p tag does not break grid alignment */
         display: contents; 
     }
     </style>
@@ -133,12 +142,11 @@ def dashboard(username):
     st.markdown('<div id="fixed-header-container">', unsafe_allow_html=True)
     
     # 1. Left Content (User Icon, ID, and Logout Button)
-    # We use st.columns inside the fixed markdown container to ensure the button renders correctly in the left grid cell
-    col_user, col_logout = st.columns([2, 1])
-    
-    st.markdown('<div class="header-actions-left">', unsafe_allow_html=True) # Open the left action container
+    st.markdown('<div class="header-actions-left">', unsafe_allow_html=True) 
 
-    # User Icon and ID (Rendered in the main stream inside the fixed container)
+    st.markdown('<div class="user-actions-row">', unsafe_allow_html=True)
+    
+    # User Icon and ID
     st.markdown(f'''
         <div class="user-box">
             <div class="user-avatar">👤</div>
@@ -146,13 +154,14 @@ def dashboard(username):
         </div>
     ''', unsafe_allow_html=True)
     
-    # Logout Button (Rendered directly in the main stream inside the fixed container)
+    # Logout Button
     if st.button("Logout", key="header_logout"):
         st.session_state.logged_in = False
         st.session_state.current_user = ""
         st.session_state.page = "main"
         st.rerun()
 
+    st.markdown('</div>', unsafe_allow_html=True) # Close user-actions-row
     st.markdown('</div>', unsafe_allow_html=True) # Close header-actions-left
     
     # 2. Center Content (Dashboard Title)
