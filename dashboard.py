@@ -121,8 +121,8 @@ def dashboard_css():
     <style>
     /* 1. Global Background and Padding */
     .main .block-container {
-        /* Adjusted top padding: 100px (header) + 50px (nav bar) + 20px (gap) = 170px for safety */
-        padding-top: 170px !important; 
+        /* Pushing the content down past the two fixed bars (Header 64px + Nav 60px + margin) */
+        padding-top: 150px !important; 
         padding-left: 40px;
         padding-right: 40px;
         padding-bottom: 40px;
@@ -132,31 +132,28 @@ def dashboard_css():
         background: #001928 !important; /* New Dark Background */
     }
 
-    /* 2. Header Style (Top Bar: Title, User, Logout) */
-    .dashboard-header {
+    /* --- FIXED HEADER CONTAINER --- */
+    /* stContainerWrapper is used here to target the custom container for fixed position */
+    .fixed-header-container > div:first-child {
         position: fixed;
         left: 0;
         top: 0;
-        width: 100vw;
-        height: 100px; /* Reduced Height */
+        width: 100%;
         z-index: 10;
+        padding: 0 40px; /* Padding handles the side margins */
         background: #15425b; /* New Title Bar Color */
-        padding: 16px 40px; /* Adjusted padding */
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    .stContainer .fixed-header-content {
+        height: 60px; /* Reduced Height for the header content */
         display: flex;
         align-items: center;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        box-sizing: border-box;
     }
     .dashboard-title {
         font-size: 2rem;
         font-weight: 700;
         color: #fff;
         margin-right: 32px;
-    }
-
-    /* 3. User Actions (Logout/Avatar) - Now includes the logout button */
-    .dashboard-header-spacer {
-        flex: 1;
     }
     .user-actions {
         display: flex;
@@ -175,7 +172,7 @@ def dashboard_css():
     .user-avatar {
         width: 36px;
         height: 36px;
-        background: #367588; /* Darker avatar */
+        background: #367588; 
         border-radius: 50%;
         display: flex;
         align-items: center;
@@ -183,33 +180,17 @@ def dashboard_css():
         font-size: 1.2rem;
         color: #fff;
     }
-    /* Style for the Logout Button inside the header */
-    [data-testid="stButton"][key="header_logout"] button {
-        background-color: #367588; 
-        color: white;
-        border-radius: 8px;
-        font-size: 1.0rem;
-        font-weight: 600;
-        width: auto;
-        padding: 8px 15px;
-        height: 40px;
-        margin: 0;
-        transition: background-color 0.2s;
-        border: none;
-    }
-    [data-testid="stButton"][key="header_logout"] button:hover {
-        background-color: #e57373; /* Light red hover for danger/logout */
-    }
     
-    /* 4. Top Navigation Bar (Just below the fixed header) */
-    .nav-bar-container {
+    /* --- FIXED NAVIGATION BAR CONTAINER --- */
+    .fixed-nav-container > div:first-child {
         position: fixed;
-        top: 100px; /* Right below the 100px header */
+        top: 60px; /* Right below the 60px header */
         left: 0;
         width: 100%;
-        background-color: #001928; /* Matches background for seamless look */
-        padding: 10px 40px;
         z-index: 9; 
+        background-color: #001928; /* Matches background */
+        padding: 10px 40px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.3);
     }
     
     /* Global style for main navigation buttons (New Case, Evidence Library, etc.) */
@@ -263,6 +244,23 @@ def dashboard_css():
     [data-testid="stSidebarContent"] {
         display: none !important;
     }
+    /* Style for the Logout Button */
+    [data-testid="stButton"][key="header_logout"] button {
+        background-color: #367588; 
+        color: white;
+        border-radius: 8px;
+        font-size: 1.0rem;
+        font-weight: 600;
+        width: auto;
+        padding: 8px 15px;
+        height: 40px;
+        margin: 0;
+        transition: background-color 0.2s;
+        border: none;
+    }
+    [data-testid="stButton"][key="header_logout"] button:hover {
+        background-color: #e57373; /* Light red hover for danger/logout */
+    }
     </style>
     """, unsafe_allow_html=True)
 
@@ -276,77 +274,55 @@ def dashboard(username):
     if "form_submitted" not in st.session_state:
         st.session_state.form_submitted = False
 
-    # --- Header (Fixed position) ---
-    # We use st.columns outside the st.markdown block to correctly render the button and its logic
-    
-    # 1. Logic for header logout button click
-    logout_button_clicked = st.session_state.get('header_logout_clicked', False)
-    if logout_button_clicked:
-        st.session_state.logged_in = False
-        st.session_state.current_user = ""
-        st.session_state.page = "main"
-        st.rerun()
-
-    # 2. Render the fixed header
-    st.markdown(f'''
-        <div class="dashboard-header">
-            <div class="dashboard-title">Dashboard</div>
-            <div class="dashboard-header-spacer"></div>
-            <div class="user-actions">
+    # --- Fixed Header (Title, User ID, Logout) ---
+    with st.container(border=False) as header_container:
+        header_container.html_id = "fixed-header-container"
+        st.markdown('<div class="fixed-header-content">', unsafe_allow_html=True)
+        
+        # Header Content Layout
+        title_col, spacer_col, user_col, logout_col = st.columns([2, 5, 2, 1.5])
+        
+        with title_col:
+            st.markdown('<div class="dashboard-title">Dashboard</div>', unsafe_allow_html=True)
+            
+        with user_col:
+            st.markdown(f'''
                 <div class="user-box">
                     {username.upper()}
                     <div class="user-avatar">👤</div>
                 </div>
-                <!-- Placeholder for the Logout Button to be rendered below -->
-                <div id="logout-placeholder" style="margin-left: 10px;"></div>
-            </div>
-        </div>
-    ''', unsafe_allow_html=True)
+            ''', unsafe_allow_html=True)
+            
+        with logout_col:
+            if st.button("Logout", key="header_logout"):
+                st.session_state.logged_in = False
+                st.session_state.current_user = ""
+                st.session_state.page = "main"
+                st.rerun()
 
-    # 3. Render the Logout Button separately and use CSS to place it in the fixed header
-    # We use a special key here to track clicks in session state
-    if st.button("Logout", key="header_logout"):
-        # Set a session state flag to handle the rerun/logout process cleanly
-        st.session_state.header_logout_clicked = True
-        st.rerun()
+        st.markdown('</div>', unsafe_allow_html=True)
+
+    # --- Fixed Navigation Bar (Main Buttons) ---
+    with st.container(border=False) as nav_container:
+        nav_container.html_id = "fixed-nav-container"
         
-    # CSS to move the button into the fixed header's placeholder
-    st.markdown("""
-        <style>
-        /* Target the actual button Streamlit renders and move it */
-        [data-testid="stButton"][key="header_logout"] {
-            position: fixed;
-            top: 30px; /* Adjust this value to vertically center it within the 100px header */
-            right: 50px; /* Matches the header padding */
-            z-index: 11; /* Above the header (10) */
-        }
-        </style>
-    """, unsafe_allow_html=True)
+        # Columns for navigation, ensuring equal width
+        nav_col1, nav_col2, nav_col3, nav_col4 = st.columns(4)
 
+        # Function to create a nav button with common styling
+        def nav_button(label, key, target_page, col):
+            with col:
+                with stylable_container(f"nav_button_{key}", css_styles=".main-nav-button"):
+                    if st.button(label, key=key, help=f"Go to {label}"):
+                        st.session_state.page = target_page
+                        st.rerun()
 
-    # --- Navigation Bar (Fixed position right below the header) ---
-    st.markdown('<div class="nav-bar-container">', unsafe_allow_html=True)
-    
-    # Columns for navigation, ensuring equal width
-    nav_col1, nav_col2, nav_col3, nav_col4 = st.columns(4)
-
-    # Function to create a nav button with common styling
-    def nav_button(label, key, target_page, col):
-        with col:
-            with stylable_container(f"nav_button_{key}", css_styles=".main-nav-button"):
-                if st.button(label, key=key, help=f"Go to {label}"):
-                    st.session_state.page = target_page
-                    st.rerun()
-
-    # Navigation Buttons
-    nav_button("New Case", "nav_new_case", "new_case_selector", nav_col1)
-    nav_button("Evidence Library", "nav_evidence", "evidence_library", nav_col2)
-    nav_button("Search Cases", "nav_search", "search_cases", nav_col3)
-    nav_button("Legal Reference", "nav_legal", "legal_reference", nav_col4)
+        # Navigation Buttons
+        nav_button("New Case", "nav_new_case", "new_case_selector", nav_col1)
+        nav_button("Evidence Library", "nav_evidence", "evidence_library", nav_col2)
+        nav_button("Search Cases", "nav_search", "search_cases", nav_col3)
+        nav_button("Legal Reference", "nav_legal", "legal_reference", nav_col4)
                 
-    st.markdown('</div>', unsafe_allow_html=True) # Close nav-bar-container
-
-
     # --- Main Content Router ---
     st.markdown('<div class="dashboard-main">', unsafe_allow_html=True)
 
