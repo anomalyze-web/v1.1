@@ -169,11 +169,11 @@ color: #fff;
 
 #fixed-nav-container {
 position: fixed;
-top: 60px;
+top: 60px; 
 left: 0;
 width: 100%;
 z-index: 9;
-background-color: #001928
+background-color: #001928; 
 padding: 10px 40px;
 box-shadow: 0 2px 5px rgba(0,0,0,0.3);
 }
@@ -181,7 +181,7 @@ box-shadow: 0 2px 5px rgba(0,0,0,0.3);
 .main-nav-button button {
 background-color: #1c4868 !important;
 color: white;
-border: 2px solid #61a3cd !important;
+border: 2px solid #61a3cd !important; 
 border-radius: 8px;
 font-size: 1.05rem;
 font-weight: 600;
@@ -201,15 +201,15 @@ padding-top: 20px;
 .section-header {
 font-size: 1.8rem;
 font-weight: 700;
-color: #3a7ba4 !importan;
+color: #3a7ba4 !important; 
 margin-top: 30px;
 margin-bottom: 15px;
 border-bottom: 2px solid #367588;
 padding-bottom: 5px;
 }
 .placeholder-box {
-background: #15425b;
-color: #99aab5;
+background: #15425b; 
+color: #99aab5; 
 padding: 20px;
 border-radius: 12px;
 margin-bottom: 20px;
@@ -240,7 +240,7 @@ transition: background-color 0.2s;
 border: none;
 }
 [data-testid="stButton"][key="header_logout"] button:hover {
-background-color: #2f6690;
+background-color: #e57373; 
 }
 </style>
 """, unsafe_allow_html=True)
