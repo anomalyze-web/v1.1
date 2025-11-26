@@ -67,7 +67,7 @@ def check_user(username, password):
 
 st.set_page_config(page_title="Anomalyze Login", layout="wide")
 
-# --- CUSTOM CSS FOR LOGIN/SIGNUP PAGE (V5 Layout and Color Palette) ---
+# --- CUSTOM CSS FOR LOGIN/SIGNUP PAGE (V6 Layout and Color Palette) ---
 st.markdown("""
 <style>
 /* Main Background Color: #15425b */
@@ -79,14 +79,14 @@ body, [data-testid="stAppViewContainer"], .main {
 .left-panel-custom {
     background-color: #367588; /* Dark Turquoise/Teal */
     border-radius: 24px;
-    /* This padding and min-height combination targets visual alignment with the form */
     padding: 70px 30px; 
     width: 100%; 
     box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
     display: flex;
     flex-direction: column;
     justify-content: center; /* Center content vertically */
-    min-height: 480px; /* Adjusted height to match form visually */
+    /* Increased height slightly for better alignment with the final button */
+    min-height: 500px; 
     animation: fadeIn 1.2s ease;
     opacity: 0.95;
 }
@@ -95,10 +95,10 @@ body, [data-testid="stAppViewContainer"], .main {
     to { opacity: 0.95; transform: translateY(0);}
 }
 
-/* Left Panel Title - Text Color changed to #15425b (Dark Blue) for visibility on Turquoise background */
+/* Left Panel Title - Text Color changed to #15425b (Dark Blue) */
 .left-panel-title {
-    color: #15425b; /* Changed back to dark blue as requested */
-    font-size: 5rem; /* Adjusted font size to better fit the box */
+    color: #15425b; /* Dark blue text on dark turquoise background */
+    font-size: 4.5rem; /* Reduced size slightly to guarantee fit and centering */
     font-weight: bold;
     text-align: center;
     line-height: 1.1;
@@ -205,11 +205,16 @@ def login_signup_ui():
     m1, c_welcome, c_spacer, c_login, m2 = st.columns([5, 45, 5, 40, 5])
     
     with c_welcome:
-        # Left Panel (Welcome)
-        st.markdown('<div class="left-panel-custom">', unsafe_allow_html=True)
-        # Title is now correctly inside the custom div in the column, and its CSS color is set to #15425b
-        st.markdown('<div class="left-panel-title">Welcome to<br>Anomalyze!</div>', unsafe_allow_html=True)
-        st.markdown('</div>', unsafe_allow_html=True)
+        # Left Panel (Welcome) - Combined HTML for the container and title into one call
+        # to ensure they render inside the same Streamlit block, fixing the layout issue.
+        welcome_html = f"""
+        <div class="left-panel-custom">
+            <div class="left-panel-title">
+                Welcome to<br>Anomalyze!
+            </div>
+        </div>
+        """
+        st.markdown(welcome_html, unsafe_allow_html=True)
         
     with c_login:
         # Right Panel (Login/Signup Form)
