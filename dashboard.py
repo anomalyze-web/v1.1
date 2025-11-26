@@ -11,8 +11,10 @@ from CO_Relation_analysis import show_correlation_analysis
 # --- Helper Functions (Page Views) ---
 
 def show_evidence_library():
+"""Placeholder screen for Evidence Library."""
 st.title("Evidence Library")
 st.markdown("---")
+# Added back button for navigation flow
 if st.button("⬅ Back to Dashboard"):
 st.session_state.page = "main"
 st.rerun()
@@ -24,8 +26,10 @@ st.markdown('<div style="margin-top: 50px; padding: 30px; border: 1px dashed #55
 </div>', unsafe_allow_html=True)
 
 def show_search_cases():
+"""Placeholder screen for Search Cases."""
 st.title("Search Historical Cases")
 st.markdown("---")
+# Added back button for navigation flow
 if st.button("⬅ Back to Dashboard"):
 st.session_state.page = "main"
 st.rerun()
@@ -37,8 +41,10 @@ st.markdown('<div style="margin-top: 50px; padding: 30px; border: 1px dashed #55
 </div>', unsafe_allow_html=True)
 
 def show_legal_reference():
+"""Placeholder screen for Legal Reference."""
 st.title("Legal Reference and Standards")
 st.markdown("---")
+# Added back button for navigation flow
 if st.button("⬅ Back to Dashboard"):
 st.session_state.page = "main"
 st.rerun()
@@ -49,14 +55,17 @@ st.markdown('<div style="padding: 30px; border: 1px dashed #555; border-radius: 
 </div>', unsafe_allow_html=True)
 
 def show_new_case_selector():
+"""Selector for the specific type of case data to be uploaded."""
 st.markdown(f"### Select Data Type for New Case:")
 
 col1, col2, col3, col4 = st.columns(4)
 
+# Back button for navigation flow
 if st.button("⬅ Back to Dashboard"):
 st.session_state.page = "main"
 st.rerun()
 
+# Updated button style for selector screen: #1c4868 background, #61a3cd border/outline
 selector_button_style = """
 button {
 background-color: #1c4868 !important;
@@ -110,7 +119,9 @@ def dashboard_css():
 st.markdown("""
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 <style>
+/* 1. Global Background and Padding */
 .main .block-container {
+/* Pushing the content down past the two fixed bars (Header 60px + Nav 60px + margin) */
 padding-top: 140px !important;
 padding-left: 40px;
 padding-right: 40px;
@@ -118,21 +129,23 @@ padding-bottom: 40px;
 max-width: 100% !important;
 }
 body, [data-testid="stAppViewContainer"] {
-background: #001928 !important;
+background: #001928 !important; /* New Dark Background */
 }
 
+/* --- FIXED HEADER CONTAINER --- */
+/* Target the custom div ID applied in Python for fixed position */
 #fixed-header-container {
 position: fixed;
 left: 0;
 top: 0;
 width: 100%;
 z-index: 10;
-padding: 0 40px;
-background: #15425b;
+padding: 0 40px; /* Padding handles the side margins */
+background: #15425b; /* New Title Bar Color */
 box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
 .fixed-header-content {
-height: 60px;
+height: 60px; /* Reduced Height for the header content */
 display: flex;
 align-items: center;
 }
@@ -168,21 +181,23 @@ font-size: 1.2rem;
 color: #fff;
 }
 
+/* --- FIXED NAVIGATION BAR CONTAINER --- */
 #fixed-nav-container {
 position: fixed;
-top: 60px;
+top: 60px; /* Right below the 60px header */
 left: 0;
 width: 100%;
 z-index: 9;
-background-color: #001928;
+background-color: #001928; /* Matches background */
 padding: 10px 40px;
 box-shadow: 0 2px 5px rgba(0,0,0,0.3);
 }
 
+/* Global style for main navigation buttons (New Case, Evidence Library, etc.) */
 .main-nav-button button {
 background-color: #1c4868 !important;
 color: white;
-border: 2px solid #61a3cd !important;
+border: 2px solid #61a3cd !important; /* Light blue border */
 border-radius: 8px;
 font-size: 1.05rem;
 font-weight: 600;
@@ -196,21 +211,22 @@ background-color: #367588 !important;
 border-color: #fff !important;
 }
 
+/* 5. Main Content Area */
 .dashboard-main {
 padding-top: 20px;
 }
 .section-header {
 font-size: 1.8rem;
 font-weight: 700;
-color: #3a7ba4 !important;
+color: #3a7ba4 !important; /* Bookmarked/Recent Cases Header Color */
 margin-top: 30px;
 margin-bottom: 15px;
 border-bottom: 2px solid #367588;
 padding-bottom: 5px;
 }
 .placeholder-box {
-background: #15425b;
-color: #99aab5;
+background: #15425b; /* Dark Blue Placeholder Box */
+color: #99aab5; /* Light grey text */
 padding: 20px;
 border-radius: 12px;
 margin-bottom: 20px;
@@ -221,12 +237,14 @@ margin-top: 0;
 color: #fff;
 }
 
+/* Remove Sidebar */
 [data-testid="stSidebar"] {
 display: none !important;
 }
 [data-testid="stSidebarContent"] {
 display: none !important;
 }
+/* Style for the Logout Button */
 [data-testid="stButton"][key="header_logout"] button {
 background-color: #367588;
 color: white;
@@ -241,7 +259,7 @@ transition: background-color 0.2s;
 border: none;
 }
 [data-testid="stButton"][key="header_logout"] button:hover {
-background-color: #e57373;
+background-color: #e57373; /* Light red hover for danger/logout */
 }
 </style>
 """, unsafe_allow_html=True)
@@ -257,9 +275,11 @@ if "form_submitted" not in st.session_state:
 st.session_state.form_submitted = False
 
 # --- Fixed Header (Title, User ID, Logout) ---
+# Wrap in a DIV with the fixed-header-container ID
 st.markdown('<div id="fixed-header-container">', unsafe_allow_html=True)
 st.markdown('<div class="fixed-header-content">', unsafe_allow_html=True)
 
+# Header Content Layout using Streamlit columns
 title_col, spacer_col, user_col, logout_col = st.columns([2, 5, 2, 1.5])
 
 with title_col:
@@ -280,14 +300,17 @@ st.session_state.current_user = ""
 st.session_state.page = "main"
 st.rerun()
 
-st.markdown('</div>', unsafe_allow_html=True)
-st.markdown('</div>', unsafe_allow_html=True)
+st.markdown('</div>', unsafe_allow_html=True) # Close fixed-header-content
+st.markdown('</div>', unsafe_allow_html=True) # Close fixed-header-container
 
 # --- Fixed Navigation Bar (Main Buttons) ---
+# Wrap in a DIV with the fixed-nav-container ID
 st.markdown('<div id="fixed-nav-container">', unsafe_allow_html=True)
 
+# Columns for navigation, ensuring equal width
 nav_col1, nav_col2, nav_col3, nav_col4 = st.columns(4)
 
+# Function to create a nav button with common styling
 def nav_button(label, key, target_page, col):
 with col:
 with stylable_container(f"nav_button_{key}", css_styles=".main-nav-button"):
@@ -295,12 +318,13 @@ if st.button(label, key=key, help=f"Go to {label}"):
 st.session_state.page = target_page
 st.rerun()
 
+# Navigation Buttons
 nav_button("New Case", "nav_new_case", "new_case_selector", nav_col1)
 nav_button("Evidence Library", "nav_evidence", "evidence_library", nav_col2)
 nav_button("Search Cases", "nav_search", "search_cases", nav_col3)
 nav_button("Legal Reference", "nav_legal", "legal_reference", nav_col4)
 
-st.markdown('</div>', unsafe_allow_html=True)
+st.markdown('</div>', unsafe_allow_html=True) # Close fixed-nav-container
 
 
 # --- Main Content Router ---
@@ -313,9 +337,11 @@ st.markdown('<div class="placeholder-box"><h4>No bookmarked cases available.</h4
 st.markdown('<h2 class="section-header">Recent Activity</h2>', unsafe_allow_html=True)
 st.markdown('<div class="placeholder-box"><h4>No recent cases analyzed.</h4><p>Start a new case using the "New Case" button above to begin your analysis.</p></div>', unsafe_allow_html=True)
 
+# New Case Selector (Replaces the old CDR/IPDR buttons)
 elif st.session_state.page == "new_case_selector":
 show_new_case_selector()
 
+# Placeholder Pages
 elif st.session_state.page == "evidence_library":
 show_evidence_library()
 elif st.session_state.page == "search_cases":
@@ -323,9 +349,11 @@ show_search_cases()
 elif st.session_state.page == "legal_reference":
 show_legal_reference()
 
+# FORM PAGES (The original CDR/IPDR upload forms)
 elif st.session_state.page in ["cdr", "ipdr", "firewall", "correlation"]:
 st.markdown(f"### Uploading **{st.session_state.page.upper()}** Case")
 
+# Back button to return to the New Case Selector
 if st.button("⬅ Back to New Case Selection"):
 st.session_state.page = "new_case_selector"
 st.session_state.form_submitted = False
@@ -347,6 +375,7 @@ st.session_state.investigator_name = investigator_name
 st.session_state.case_name = case_name
 st.session_state.remarks = remarks
 
+# Show the "Start Analysis" button only after successful submit
 if st.session_state.form_submitted:
 analysis_labels = {
 "cdr": "Start CDR Analysis",
@@ -360,6 +389,7 @@ st.session_state.page = f"{st.session_state.page}_analysis"
 st.session_state.form_submitted = False
 st.rerun()
 
+# ANALYSIS PAGES (imported from separate files)
 elif st.session_state.page == "cdr_analysis":
 show_cdr_analysis(
 st.session_state.case_number,
