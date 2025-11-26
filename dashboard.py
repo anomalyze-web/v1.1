@@ -104,7 +104,7 @@ def show_new_case_selector():
 def dashboard(username):
     st.set_page_config(page_title="Anomalyze Dashboard", layout="wide")
     
-    # 1. Base CSS for fixed elements and global styles (Main CSS block)
+    # Merged and fully fixed CSS block (all lines flush left inside the string)
     st.markdown("""
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 <style>
@@ -208,12 +208,7 @@ body, [data-testid="stAppViewContainer"] {background: #001928 !important;}
     padding-bottom: 40px;
     max-width: 100% !important;
 }
-</style>
-""", unsafe_allow_html=True)
 
-    # 2. Utility CSS block (to prevent Markdown rendering)
-    st.markdown("""
-<style>
 .section-header {
     font-size: 1.8rem;
     font-weight: 700;
