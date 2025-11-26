@@ -114,17 +114,15 @@ def show_new_case_selector():
                 st.session_state.form_submitted = False
                 st.rerun()
 
-def dashboard(username):
-    st.set_page_config(page_title="Anomalyze Dashboard", layout="wide")
-    
-    st.markdown(f"""
+def inject_css():
+    st.markdown("""
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 <style>
-[data-testid="stAppViewContainer"] {{margin-top:0 !important; padding-top:0 !important;}}
-body, [data-testid="stAppViewContainer"] {{background:#001928 !important;}}
-[data-testid="stSidebar"], [data-testid="stSidebarContent"] {{display:none !important;}}
+[data-testid="stAppViewContainer"] {margin-top:0 !important; padding-top:0 !important;}
+body, [data-testid="stAppViewContainer"] {background:#001928 !important;}
+[data-testid="stSidebar"], [data-testid="stSidebarContent"] {display:none !important;}
 
-#fixed-header-container {{
+#fixed-header-container {
     position:fixed;
     left:0;
     top:0;
@@ -136,29 +134,29 @@ body, [data-testid="stAppViewContainer"] {{background:#001928 !important;}}
     height:120px; 
     display:flex;
     align-items:center;
-}}
-.fixed-header-content {{
+}
+.fixed-header-content {
     width:100%;
     display:flex;
     align-items:center;
-}}
-.dashboard-title {{
+}
+.dashboard-title {
     font-size:2.5rem;
     font-weight:700;
     color:#fff;
     text-align:center;
     margin:0;
     line-height:1.2;
-}}
-.user-box {{
+}
+.user-box {
     font-size:1.2rem;
     font-weight:600;
     color:#fff;
     display:flex;
     align-items:center;
     gap:8px;
-}}
-.user-avatar {{
+}
+.user-avatar {
     width:36px;
     height:36px;
     background:#367588;
@@ -168,9 +166,9 @@ body, [data-testid="stAppViewContainer"] {{background:#001928 !important;}}
     justify-content:center;
     font-size:1.2rem;
     color:#fff;
-}}
+}
 
-#fixed-nav-container {{
+#fixed-nav-container {
     position:fixed;
     top:120px; 
     left:0;
@@ -179,9 +177,9 @@ body, [data-testid="stAppViewContainer"] {{background:#001928 !important;}}
     background-color:#001928; 
     padding:10px 40px;
     box-shadow:0 2px 5px rgba(0,0,0,0.3);
-}}
+}
 
-.main-nav-button button {{
+.main-nav-button button {
     background-color:#1c4868 !important;
     color:white;
     border:2px solid #61a3cd !important;
@@ -192,13 +190,13 @@ body, [data-testid="stAppViewContainer"] {{background:#001928 !important;}}
     height:40px;
     margin:0;
     transition:all 0.2s;
-}}
-.main-nav-button button:hover {{
+}
+.main-nav-button button:hover {
     background-color:#367588 !important;
     border-color:#fff !important;
-}}
+}
 
-[data-testid="stButton"][key="header_logout"] button {{
+[data-testid="stButton"][key="header_logout"] button {
     background-color:#367588;
     color:white;
     border-radius:8px;
@@ -210,18 +208,18 @@ body, [data-testid="stAppViewContainer"] {{background:#001928 !important;}}
     margin:0;
     transition:background-color 0.2s;
     border:none;
-}}
-[data-testid="stButton"][key="header_logout"] button:hover {{background-color:#e57373;}}
+}
+[data-testid="stButton"][key="header_logout"] button:hover {background-color:#e57373;}
 
-.main .block-container {{
+.main .block-container {
     padding-top:180px !important;
     padding-left:40px;
     padding-right:40px;
     padding-bottom:40px;
     max-width:100% !important;
-}}
+}
 
-.section-header {{
+.section-header {
     font-size:1.8rem;
     font-weight:700;
     color:#3a7ba4 !important;
@@ -229,24 +227,62 @@ body, [data-testid="stAppViewContainer"] {{background:#001928 !important;}}
     margin-bottom:15px;
     border-bottom:2px solid #367588;
     padding-bottom:5px;
-}}
+}
 
-.placeholder-box {{
+.placeholder-box {
     background:#15425b;
     color:#99aab5;
     padding:20px;
     border-radius:12px;
     margin-bottom:20px;
     box-shadow:0 2px 8px rgba(0,0,0,0.15);
-}}
+}
 
-.placeholder-box h4 {{
+.placeholder-box h4 {
     margin-top:0;
     color:#fff;
-}}
+}
+
+/* Fix from Screenshot 2025-11-27 at 4.23.42 AM.jpg */
+.main .block-container {
+    padding-top:180px !important;
+    padding-left:40px;
+    padding-right:40px;
+    padding-bottom:40px;
+    max-width:100% !important;
+}
+.section-header {
+    font-size:1.8rem;
+    font-weight:700;
+    color:#3a7ba4 !important;
+    margin-top:30px;
+    margin-bottom:15px;
+    border-bottom:2px solid #367588;
+    padding-bottom:5px;
+}
+.placeholder-box {
+    background:#15425b;
+    color:#99aab5;
+    padding:20px;
+    border-radius:12px;
+    margin-bottom:20px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.15);
+}
+.placeholder-box h4 {
+    margin-top:0;
+    color:#fff;
+}
 </style>
 """, unsafe_allow_html=True)
+
+
+def dashboard(username):
+    st.set_page_config(page_title="Anomalyze Dashboard", layout="wide")
     
+    # 1. CSS INJECTION BLOCK (Guaranteed to run before content)
+    inject_css()
+    
+    # 2. Session State Initialization
     if "page" not in st.session_state:
         st.session_state.page = "main"
     if "form_submitted" not in st.session_state:
@@ -256,6 +292,7 @@ body, [data-testid="stAppViewContainer"] {{background:#001928 !important;}}
     if "current_user" not in st.session_state:
         st.session_state.current_user = username
 
+    # 3. FIXED HEADER HTML STRUCTURE
     st.markdown('<div id="fixed-header-container">', unsafe_allow_html=True)
     st.markdown('<div class="fixed-header-content">', unsafe_allow_html=True)
 
@@ -285,6 +322,7 @@ body, [data-testid="stAppViewContainer"] {{background:#001928 !important;}}
     st.markdown('</div>', unsafe_allow_html=True) 
     st.markdown('</div>', unsafe_allow_html=True) 
 
+    # 4. FIXED NAVIGATION HTML STRUCTURE
     st.markdown('<div id="fixed-nav-container">', unsafe_allow_html=True)
 
     nav_col1, nav_col2, nav_col3, nav_col4 = st.columns(4)
@@ -303,6 +341,7 @@ body, [data-testid="stAppViewContainer"] {{background:#001928 !important;}}
 
     st.markdown('</div>', unsafe_allow_html=True) 
 
+    # 5. MAIN CONTENT AREA
     st.markdown('<div class="dashboard-main">', unsafe_allow_html=True)
 
     if st.session_state.page == "main":
