@@ -121,8 +121,8 @@ def dashboard_css():
     <style>
     /* 1. Global Background and Padding */
     .main .block-container {
-        /* Pushing the content down past the two fixed bars (Header 64px + Nav 60px + margin) */
-        padding-top: 150px !important; 
+        /* Pushing the content down past the two fixed bars (Header 60px + Nav 60px + margin) */
+        padding-top: 140px !important; 
         padding-left: 40px;
         padding-right: 40px;
         padding-bottom: 40px;
@@ -133,8 +133,8 @@ def dashboard_css():
     }
 
     /* --- FIXED HEADER CONTAINER --- */
-    /* stContainerWrapper is used here to target the custom container for fixed position */
-    .fixed-header-container > div:first-child {
+    /* Target the custom div ID applied in Python for fixed position */
+    #fixed-header-container {
         position: fixed;
         left: 0;
         top: 0;
@@ -144,7 +144,7 @@ def dashboard_css():
         background: #15425b; /* New Title Bar Color */
         box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     }
-    .stContainer .fixed-header-content {
+    .fixed-header-content {
         height: 60px; /* Reduced Height for the header content */
         display: flex;
         align-items: center;
@@ -182,7 +182,7 @@ def dashboard_css():
     }
     
     /* --- FIXED NAVIGATION BAR CONTAINER --- */
-    .fixed-nav-container > div:first-child {
+    #fixed-nav-container {
         position: fixed;
         top: 60px; /* Right below the 60px header */
         left: 0;
@@ -275,54 +275,58 @@ def dashboard(username):
         st.session_state.form_submitted = False
 
     # --- Fixed Header (Title, User ID, Logout) ---
-    with st.container(border=False) as header_container:
-        header_container.html_id = "fixed-header-container"
-        st.markdown('<div class="fixed-header-content">', unsafe_allow_html=True)
+    # Wrap in a DIV with the fixed-header-container ID
+    st.markdown('<div id="fixed-header-container">', unsafe_allow_html=True)
+    st.markdown('<div class="fixed-header-content">', unsafe_allow_html=True)
+    
+    # Header Content Layout using Streamlit columns
+    title_col, spacer_col, user_col, logout_col = st.columns([2, 5, 2, 1.5])
+    
+    with title_col:
+        st.markdown('<div class="dashboard-title">Dashboard</div>', unsafe_allow_html=True)
         
-        # Header Content Layout
-        title_col, spacer_col, user_col, logout_col = st.columns([2, 5, 2, 1.5])
+    with user_col:
+        st.markdown(f'''
+            <div class="user-box">
+                {username.upper()}
+                <div class="user-avatar">👤</div>
+            </div>
+        ''', unsafe_allow_html=True)
         
-        with title_col:
-            st.markdown('<div class="dashboard-title">Dashboard</div>', unsafe_allow_html=True)
-            
-        with user_col:
-            st.markdown(f'''
-                <div class="user-box">
-                    {username.upper()}
-                    <div class="user-avatar">👤</div>
-                </div>
-            ''', unsafe_allow_html=True)
-            
-        with logout_col:
-            if st.button("Logout", key="header_logout"):
-                st.session_state.logged_in = False
-                st.session_state.current_user = ""
-                st.session_state.page = "main"
-                st.rerun()
+    with logout_col:
+        if st.button("Logout", key="header_logout"):
+            st.session_state.logged_in = False
+            st.session_state.current_user = ""
+            st.session_state.page = "main"
+            st.rerun()
 
-        st.markdown('</div>', unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True) # Close fixed-header-content
+    st.markdown('</div>', unsafe_allow_html=True) # Close fixed-header-container
 
     # --- Fixed Navigation Bar (Main Buttons) ---
-    with st.container(border=False) as nav_container:
-        nav_container.html_id = "fixed-nav-container"
-        
-        # Columns for navigation, ensuring equal width
-        nav_col1, nav_col2, nav_col3, nav_col4 = st.columns(4)
+    # Wrap in a DIV with the fixed-nav-container ID
+    st.markdown('<div id="fixed-nav-container">', unsafe_allow_html=True)
+    
+    # Columns for navigation, ensuring equal width
+    nav_col1, nav_col2, nav_col3, nav_col4 = st.columns(4)
 
-        # Function to create a nav button with common styling
-        def nav_button(label, key, target_page, col):
-            with col:
-                with stylable_container(f"nav_button_{key}", css_styles=".main-nav-button"):
-                    if st.button(label, key=key, help=f"Go to {label}"):
-                        st.session_state.page = target_page
-                        st.rerun()
+    # Function to create a nav button with common styling
+    def nav_button(label, key, target_page, col):
+        with col:
+            with stylable_container(f"nav_button_{key}", css_styles=".main-nav-button"):
+                if st.button(label, key=key, help=f"Go to {label}"):
+                    st.session_state.page = target_page
+                    st.rerun()
 
-        # Navigation Buttons
-        nav_button("New Case", "nav_new_case", "new_case_selector", nav_col1)
-        nav_button("Evidence Library", "nav_evidence", "evidence_library", nav_col2)
-        nav_button("Search Cases", "nav_search", "search_cases", nav_col3)
-        nav_button("Legal Reference", "nav_legal", "legal_reference", nav_col4)
-                
+    # Navigation Buttons
+    nav_button("New Case", "nav_new_case", "new_case_selector", nav_col1)
+    nav_button("Evidence Library", "nav_evidence", "evidence_library", nav_col2)
+    nav_button("Search Cases", "nav_search", "search_cases", nav_col3)
+    nav_button("Legal Reference", "nav_legal", "legal_reference", nav_col4)
+            
+    st.markdown('</div>', unsafe_allow_html=True) # Close fixed-nav-container
+
+
     # --- Main Content Router ---
     st.markdown('<div class="dashboard-main">', unsafe_allow_html=True)
 
