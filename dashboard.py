@@ -146,10 +146,10 @@ body,[data-testid="stAppViewContainer"]{background:#001928!important;}
     display:flex;
     align-items:center;
     height: 60px; 
-    /* NEW FIX: Pin row to the absolute top of the container and add padding to move content down */
+    /* PINNED to absolute top, adjusted to 5px padding for minimum clearance */
     position: absolute;
     top: 0;
-    padding-top: 10px; /* Use this to adjust vertical centering relative to top edge */
+    padding-top: 5px; 
 }
 /* Bottom row for Navigation Buttons */
 .fixed-nav-row{
@@ -158,7 +158,7 @@ body,[data-testid="stAppViewContainer"]{background:#001928!important;}
     align-items:center;
     height: 60px;
     padding-bottom: 5px;
-    /* NEW FIX: Pin this row exactly 60px from the top */
+    /* Pinned exactly 60px from the top */
     position: absolute;
     top: 60px;
 }
