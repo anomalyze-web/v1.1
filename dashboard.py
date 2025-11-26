@@ -109,9 +109,7 @@ def dashboard_css():
     st.markdown("""
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 <style>
-/* 1. Global Background and Padding */
 .main .block-container {
-/* Pushing the content down past the two fixed bars (Header 60px + Nav 60px + margin) */
 padding-top: 140px !important;
 padding-left: 40px;
 padding-right: 40px;
@@ -119,23 +117,21 @@ padding-bottom: 40px;
 max-width: 100% !important;
 }
 body, [data-testid="stAppViewContainer"] {
-background: #001928 !important; /* New Dark Background */
+background: #001928 !important; 
 }
 
-/* --- FIXED HEADER CONTAINER --- */
-/* Target the custom div ID applied in Python for fixed position */
 #fixed-header-container {
 position: fixed;
 left: 0;
 top: 0;
 width: 100%;
 z-index: 10;
-padding: 0 40px; /* Padding handles the side margins */
-background: #15425b; /* New Title Bar Color */
+padding: 0 40px; 
+background: #15425b; 
 box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
 .fixed-header-content {
-height: 60px; /* Reduced Height for the header content */
+height: 60px; 
 display: flex;
 align-items: center;
 }
@@ -171,23 +167,21 @@ font-size: 1.2rem;
 color: #fff;
 }
 
-/* --- FIXED NAVIGATION BAR CONTAINER --- */
 #fixed-nav-container {
 position: fixed;
-top: 60px; /* Right below the 60px header */
+top: 60px;
 left: 0;
 width: 100%;
 z-index: 9;
-background-color: #001928; /* Matches background */
+background-color: #001928
 padding: 10px 40px;
 box-shadow: 0 2px 5px rgba(0,0,0,0.3);
 }
 
-/* Global style for main navigation buttons (New Case, Evidence Library, etc.) */
 .main-nav-button button {
 background-color: #1c4868 !important;
 color: white;
-border: 2px solid #61a3cd !important; /* Light blue border */
+border: 2px solid #61a3cd !important;
 border-radius: 8px;
 font-size: 1.05rem;
 font-weight: 600;
@@ -201,22 +195,21 @@ background-color: #367588 !important;
 border-color: #fff !important;
 }
 
-/* 5. Main Content Area */
 .dashboard-main {
 padding-top: 20px;
 }
 .section-header {
 font-size: 1.8rem;
 font-weight: 700;
-color: #3a7ba4 !important; /* Bookmarked/Recent Cases Header Color */
+color: #3a7ba4 !importan;
 margin-top: 30px;
 margin-bottom: 15px;
 border-bottom: 2px solid #367588;
 padding-bottom: 5px;
 }
 .placeholder-box {
-background: #15425b; /* Dark Blue Placeholder Box */
-color: #99aab5; /* Light grey text */
+background: #15425b;
+color: #99aab5;
 padding: 20px;
 border-radius: 12px;
 margin-bottom: 20px;
@@ -227,14 +220,12 @@ margin-top: 0;
 color: #fff;
 }
 
-/* Remove Sidebar */
 [data-testid="stSidebar"] {
 display: none !important;
 }
 [data-testid="stSidebarContent"] {
 display: none !important;
 }
-/* Style for the Logout Button */
 [data-testid="stButton"][key="header_logout"] button {
 background-color: #367588;
 color: white;
@@ -249,7 +240,7 @@ transition: background-color 0.2s;
 border: none;
 }
 [data-testid="stButton"][key="header_logout"] button:hover {
-background-color: #e57373; /* Light red hover for danger/logout */
+background-color: #2f6690;
 }
 </style>
 """, unsafe_allow_html=True)
