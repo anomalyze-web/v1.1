@@ -107,6 +107,11 @@ def dashboard(username):
     st.markdown("""
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 <style>
+/* Ensure the body and main app container have no initial margin/padding pushing content down */
+[data-testid="stAppViewContainer"] {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
 .main .block-container {padding-top: 160px !important;padding-left: 40px;padding-right: 40px;padding-bottom: 40px;max-width: 100% !important;}
 body, [data-testid="stAppViewContainer"] {background: #001928 !important;}
 #fixed-header-container {position: fixed;left: 0;top: 0;width: 100%;z-index: 10;padding: 0 40px;background: #15425b;box-shadow: 0 4px 12px rgba(0,0,0,0.3);}
