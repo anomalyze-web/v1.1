@@ -131,7 +131,7 @@ body,[data-testid="stAppViewContainer"]{background:#001928!important;}
     left:0;
     top:0;
     width:100%;
-    z-index:10;
+    z-index:10000;
     padding:0 40px;
     background:#15425b;
     box-shadow:0 4px 12px rgba(0,0,0,0.3);
