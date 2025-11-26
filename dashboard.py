@@ -128,8 +128,8 @@ body, [data-testid="stAppViewContainer"] {background: #001928 !important;}
     background-color: #367588;
     color: white;
     border-radius: 8px;
-    font-size: 1.0rem;
-    font-weight: 600;
+    font-size: 0.5rem;
+    font-weight: 300;
     width: 100px; 
     padding: 8px 15px;
     height: 40px;
