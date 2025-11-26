@@ -208,9 +208,29 @@ body, [data-testid="stAppViewContainer"] {background: #001928 !important;}
     max-width: 100% !important;
 }
 
-.section-header {font-size: 1.8rem;font-weight: 700;color: #3a7ba4 !important;margin-top: 30px;margin-bottom: 15px;border-bottom: 2px solid #367588;padding-bottom: 5px;}
-.placeholder-box {background: #15425b;color: #99aab5;padding: 20px;border-radius: 12px;margin-bottom: 20px;box-shadow: 0 2px 8px rgba(0,0,0,0.15);}
-.placeholder-box h4 {margin-top: 0;color: #fff;}
+.section-header {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #3a7ba4 !important;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #367588;
+    padding-bottom: 5px;
+}
+
+.placeholder-box {
+    background: #15425b;
+    color: #99aab5;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.placeholder-box h4 {
+    margin-top: 0;
+    color: #fff;
+}
 </style>
 """, unsafe_allow_html=True)
     
