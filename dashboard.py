@@ -15,12 +15,14 @@ def show_correlation_analysis(a, b, c, d): pass
 # --- CSS and Core Function ---
 
 def dashboard_css():
+    # Use st.markdown with a specific HTML ID to apply CSS to the entire app structure
     st.markdown("""
+    <div id="dashboard-style-container">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
     /* 1. Global Background and Padding */
     .main .block-container {
-        /* Pushing the content down past the single fixed bar (Header 60px + margin) */
+        /* Pushing the content down past the fixed bar */
         padding-top: 80px !important; 
         padding-left: 40px;
         padding-right: 40px;
@@ -56,6 +58,7 @@ def dashboard_css():
     /* Remove Sidebar */
     [data-testid="stSidebar"], [data-testid="stSidebarContent"] { display: none !important; }
     </style>
+    </div>
     """, unsafe_allow_html=True)
 
 def dashboard(username):
