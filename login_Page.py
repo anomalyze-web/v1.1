@@ -1,17 +1,7 @@
 import streamlit as st
 import sqlite3
 import bcrypt
-# NOTE: Ensure 'dashboard.py' exists and contains a 'dashboard' function
-# from dashboard import dashboard 
-
-# Placeholder for dashboard function if actual file is missing
-def dashboard(username):
-    st.title(f"Welcome to the Dashboard, {username}!")
-    st.info("Your dashboard content goes here.")
-    if st.button("Logout", key="logout_dashboard"):
-        st.session_state.logged_in = False
-        st.session_state.current_user = ""
-        st.rerun()
+from dashboard import dashboard  # CORRECT: Import the actual dashboard function
 
 # --- SESSION STATE INITIALIZATION ---
 if "logged_in" not in st.session_state:
@@ -20,6 +10,12 @@ if "current_user" not in st.session_state:
     st.session_state.current_user = ""
 if "show_signup" not in st.session_state:
     st.session_state.show_signup = False
+# Initialize dashboard specific state keys if they don't exist
+if "page" not in st.session_state:
+    st.session_state.page = "main"
+if "form_submitted" not in st.session_state:
+    st.session_state.form_submitted = False
+
 
 # --- DATABASE INITIALIZATION ---
 def init_db():
@@ -67,7 +63,7 @@ def check_user(username, password):
 
 st.set_page_config(page_title="Anomalyze Login", layout="wide")
 
-# --- CUSTOM CSS FOR LOGIN/SIGNUP PAGE (V6 Layout and Color Palette) ---
+# --- CUSTOM CSS FOR LOGIN/SIGNUP PAGE ---
 st.markdown("""
 <style>
 /* Main Background Color: #15425b */
@@ -85,7 +81,7 @@ body, [data-testid="stAppViewContainer"], .main {
     display: flex;
     flex-direction: column;
     justify-content: center; /* Center content vertically */
-    /* Increased height slightly for better alignment with the final button */
+    /* Height adjusted to align with the form content */
     min-height: 500px; 
     animation: fadeIn 1.2s ease;
     opacity: 0.95;
@@ -198,15 +194,15 @@ def login_signup_ui():
     
     # Logo centered above the main login structure
     st.markdown('<div style="text-align: center;">', unsafe_allow_html=True)
-    st.image("logo.png", width=400)
+    # Assumes 'logo.png' exists in the application directory
+    st.image("logo.png", width=400) 
     st.markdown('</div>', unsafe_allow_html=True)
     
-    # New Column Ratio: 5% margin, 45% welcome, 5% spacer, 40% login, 5% margin (Total 100%)
+    # Column Ratio: 5% margin, 45% welcome, 5% spacer, 40% login, 5% margin (Total 100%)
     m1, c_welcome, c_spacer, c_login, m2 = st.columns([5, 45, 5, 40, 5])
     
     with c_welcome:
         # Left Panel (Welcome) - Combined HTML for the container and title into one call
-        # to ensure they render inside the same Streamlit block, fixing the layout issue.
         welcome_html = f"""
         <div class="left-panel-custom">
             <div class="left-panel-title">
@@ -241,7 +237,7 @@ def login_signup_ui():
                 else:
                     st.error("Please enter both username and password.")
             
-            # Switch to Sign Up link (Styled via global CSS keys)
+            # Switch to Sign Up link
             if st.button("Create a new account? Sign Up", key="goto_signup", help="Switch to Sign Up", type="secondary"):
                 st.session_state.show_signup = True
                 st.rerun()
@@ -267,7 +263,7 @@ def login_signup_ui():
                 else:
                     st.error("Please enter both a username and password.")
             
-            # Switch to Login link (Styled via global CSS keys)
+            # Switch to Login link
             if st.button("Already have an account? Login", key="goto_login", help="Back to Login", type="secondary"):
                 st.session_state.show_signup = False
                 st.rerun()
@@ -276,6 +272,7 @@ def login_signup_ui():
 
 def main():
     if st.session_state.logged_in:
+        # Call the imported dashboard function from dashboard.py
         dashboard(st.session_state.current_user) 
     else:
         login_signup_ui()
