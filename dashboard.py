@@ -135,24 +135,28 @@ body,[data-testid="stAppViewContainer"]{background:#001928!important;}
     padding:0 40px;
     background:#15425b;
     box-shadow:0 4px 12px rgba(0,0,0,0.3);
-    height:120px; /* Revert to 120px height */
+    height:120px;
     display:flex;
-    flex-direction:column; /* Stack rows vertically */
-    justify-content:space-around; /* Distribute space vertically */
+    flex-direction:column;
+    /* CHANGE: align content to the top */
+    justify-content:flex-start; 
 }
 /* Top row for User/Title/Logout */
 .fixed-header-content{
     width:100%;
     display:flex;
     align-items:center;
-    height: 60px; /* Dedicate 60px to this row, vertically centered */
+    /* CHANGE: Give top padding to push content slightly down, centering it within its row */
+    height: 60px; 
+    padding-top: 5px; 
 }
 /* Bottom row for Navigation Buttons */
 .fixed-nav-row{
     width:100%;
     display:flex;
     align-items:center;
-    height: 60px; /* Dedicate 60px to this row, vertically centered */
+    height: 60px;
+    padding-bottom: 5px;
 }
 
 /* Adjusted title font size and margin to fit the header */
@@ -208,7 +212,7 @@ def dashboard(username):
     # 3. FIXED HEADER HTML STRUCTURE (Now 120px tall, holds all header elements)
     st.markdown('<div id="fixed-header-container">', unsafe_allow_html=True)
 
-    # --- TOP ROW: User, Title, Logout (Vertically centered within its 60px slot) ---
+    # --- TOP ROW: User, Title, Logout ---
     st.markdown('<div class="fixed-header-content">', unsafe_allow_html=True)
     user_col, title_col, logout_col = st.columns([2, 6, 2])
 
@@ -235,7 +239,7 @@ def dashboard(username):
 
     st.markdown('</div>', unsafe_allow_html=True) # Closes fixed-header-content (Top Row)
     
-    # --- BOTTOM ROW: Navigation Buttons (Vertically centered within its 60px slot) ---
+    # --- BOTTOM ROW: Navigation Buttons ---
     st.markdown('<div class="fixed-nav-row">', unsafe_allow_html=True)
     nav_col1, nav_col2, nav_col3, nav_col4 = st.columns(4)
 
