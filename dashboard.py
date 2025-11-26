@@ -27,7 +27,7 @@ def dashboard_css():
         background: #001928 !important; /* Dark Background */
     }
 
-    /* Fixed Header Container */
+    /* Fixed Header Container (Uses CSS Grid for stable alignment) */
     #fixed-header-container {
         position: fixed;
         left: 0;
@@ -37,30 +37,30 @@ def dashboard_css():
         z-index: 10;
         background: #15425b; /* Requested Title Bar Color */
         box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        padding: 0 20px; /* Add padding inside the bar */
+        padding: 0 20px;
+        
+        /* GRID Layout: 3 equal parts for stability */
+        display: grid;
+        grid-template-columns: 1fr auto 1fr; /* Left space, Center title (auto), Right actions */
+        align-items: center;
     }
     
-    /* Layout for columns inside the header */
-    #header-content-wrapper {
-        display: flex;
-        align-items: center;
-        height: 60px;
-    }
-
-    /* Dashboard Title Styling (centered text) */
+    /* Dashboard Title Styling (Centered in the middle grid cell) */
     .dashboard-title-text {
         font-size: 2rem;
         font-weight: 700;
         color: #fff;
         text-align: center;
-        width: 100%; /* Take full width of its column */
+        white-space: nowrap;
     }
 
-    /* User/Logout Action Styling (on the right) */
-    .user-actions {
+    /* Right Side Actions Styling */
+    .header-actions-right {
+        grid-column: 3; /* Places this div in the rightmost column */
         display: flex;
+        justify-content: flex-end;
         align-items: center;
-        gap: 10px;
+        gap: 15px;
     }
     .user-box {
         display: flex;
@@ -69,6 +69,7 @@ def dashboard_css():
         font-size: 1rem;
         font-weight: 500;
         gap: 6px;
+        white-space: nowrap;
     }
     .user-avatar {
         width: 30px;
@@ -92,7 +93,6 @@ def dashboard_css():
         width: auto;
         padding: 5px 10px;
         height: 30px;
-        margin: 0;
         transition: background-color 0.2s;
         border: none;
     }
@@ -123,39 +123,29 @@ def dashboard(username):
 
     # --- Fixed Header (Title Bar with User/Logout) ---
     st.markdown('<div id="fixed-header-container">', unsafe_allow_html=True)
-    st.markdown('<div id="header-content-wrapper">', unsafe_allow_html=True)
     
-    # Define columns: User Actions (3 units) | Title (6 units) | Logout/User Info (3 units)
-    # Note: Using Streamlit columns *inside* a custom fixed div is tricky, but we use it for placement.
-    left_spacer, title_col, actions_col = st.columns([1, 4, 3])
+    # 1. Dashboard Title (Centered)
+    st.markdown('<div class="dashboard-title-text">Dashboard</div>', unsafe_allow_html=True)
     
-    # 1. User Actions (Left side - icon + username)
-    with left_spacer:
-        st.markdown(f'''
-            <div class="user-actions">
-                <div class="user-box">
-                    <div class="user-avatar">👤</div>
-                    {username.upper()}
-                </div>
-            </div>
-        ''', unsafe_allow_html=True)
+    # 2. User Actions (Right side)
+    st.markdown('<div class="header-actions-right">', unsafe_allow_html=True)
+    
+    # User Icon and ID
+    st.markdown(f'''
+        <div class="user-box">
+            <div class="user-avatar">👤</div>
+            {username.upper()}
+        </div>
+    ''', unsafe_allow_html=True)
+    
+    # Logout Button
+    if st.button("Logout", key="header_logout"):
+        st.session_state.logged_in = False
+        st.session_state.current_user = ""
+        st.session_state.page = "main"
+        st.rerun()
 
-    # 2. Title (Center)
-    with title_col:
-        st.markdown('<div class="dashboard-title-text">Dashboard</div>', unsafe_allow_html=True)
-        
-    # 3. Logout (Right side - button)
-    with actions_col:
-        st.markdown('<div style="display: flex; justify-content: flex-end;">', unsafe_allow_html=True)
-        if st.button("Logout", key="header_logout"):
-            st.session_state.logged_in = False
-            st.session_state.current_user = ""
-            st.session_state.page = "main"
-            st.rerun()
-        st.markdown('</div>', unsafe_allow_html=True)
-
-
-    st.markdown('</div>', unsafe_allow_html=True) # Close header-content-wrapper
+    st.markdown('</div>', unsafe_allow_html=True) # Close header-actions-right
     st.markdown('</div>', unsafe_allow_html=True) # Close fixed-header-container
 
     # Main content area (intentionally blank)
