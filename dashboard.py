@@ -38,15 +38,20 @@ def dashboard_css():
         display: flex;
         align-items: center;
         justify-content: center;
-    }
-    .dashboard-title {
+        /* Force styling of content within the fixed container */
+        color: #fff;
         font-size: 2rem;
         font-weight: 700;
-        color: #fff;
-        margin: 0;
     }
     
+    /* Remove Sidebar */
     [data-testid="stSidebar"], [data-testid="stSidebarContent"] { display: none !important; }
+
+    /* Remove extra margin/padding from inner markdown elements within the fixed header */
+    #fixed-header-container p {
+        margin: 0;
+        padding: 0;
+    }
     </style>
     """, unsafe_allow_html=True)
 
@@ -61,9 +66,8 @@ def dashboard(username):
         st.session_state.form_submitted = False
 
     # --- Fixed Header (Title Bar Only) ---
-    st.markdown('<div id="fixed-header-container">', unsafe_allow_html=True)
-    st.markdown('<div class="dashboard-title">Dashboard</div>', unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
+    # The markdown text is wrapped by Streamlit in a <p> tag, we style the container to center the content.
+    st.markdown('<div id="fixed-header-container">Dashboard</div>', unsafe_allow_html=True)
 
     # Main content area (intentionally blank)
     st.markdown('<div style="height: 500px;"></div>', unsafe_allow_html=True)
