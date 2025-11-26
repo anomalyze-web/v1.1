@@ -1,6 +1,4 @@
 import streamlit as st
-import base64
-from streamlit_extras.stylable_container import stylable_container
 
 # Dummy functions to satisfy the import requirements from the login page
 def show_evidence_library(): pass
@@ -15,14 +13,9 @@ def show_correlation_analysis(a, b, c, d): pass
 # --- CSS and Core Function ---
 
 def dashboard_css():
-    # Use st.markdown with a specific HTML ID to apply CSS to the entire app structure
     st.markdown("""
-    <div id="dashboard-style-container">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
-    /* 1. Global Background and Padding */
     .main .block-container {
-        /* Pushing the content down past the fixed bar */
         padding-top: 80px !important; 
         padding-left: 40px;
         padding-right: 40px;
@@ -30,35 +23,31 @@ def dashboard_css():
         max-width: 100% !important;
     }
     body, [data-testid="stAppViewContainer"] {
-        background: #001928 !important; /* Dark Background */
+        background: #001928 !important;
     }
 
-    /* --- FIXED HEADER CONTAINER (Title Bar Only) --- */
     #fixed-header-container {
         position: fixed;
         left: 0;
         top: 0;
         width: 100%;
-        height: 60px; /* Fixed Height */
+        height: 60px;
         z-index: 10;
-        padding: 0 40px;
-        background: #15425b; /* Requested Title Bar Color */
+        background: #15425b;
         box-shadow: 0 4px 12px rgba(0,0,0,0.3);
         display: flex;
-        align-items: center; /* Vertically center content */
-        justify-content: center; /* Horizontally center content */
+        align-items: center;
+        justify-content: center;
     }
     .dashboard-title {
         font-size: 2rem;
         font-weight: 700;
-        color: #fff; /* White text for visibility */
+        color: #fff;
         margin: 0;
     }
     
-    /* Remove Sidebar */
     [data-testid="stSidebar"], [data-testid="stSidebarContent"] { display: none !important; }
     </style>
-    </div>
     """, unsafe_allow_html=True)
 
 def dashboard(username):
@@ -76,5 +65,5 @@ def dashboard(username):
     st.markdown('<div class="dashboard-title">Dashboard</div>', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
-    # The main content area is now intentionally blank
+    # Main content area (intentionally blank)
     st.markdown('<div style="height: 500px;"></div>', unsafe_allow_html=True)
