@@ -247,22 +247,24 @@ def dashboard(username):
     ''', unsafe_allow_html=True)
     
     # 2. Top Navigation Bar (Just below the header)
-    nav_col1, nav_col2, nav_col3, nav_col4, nav_col_logout = st.columns([1, 1, 1, 1, 0.5])
-
-    # Function to create a nav button
-    def nav_button(label, key, target_page, col):
-        is_active = st.session_state.page == target_page
-        with col:
-            # We use a markdown-styled button to control its appearance inside the columns
-            if st.button(label, key=key, help=f"Go to {label}"):
-                st.session_state.page = target_page
-                st.rerun()
-
+    
+    # Use st.container to wrap the navigation buttons and ensure they are flush
     with st.container():
+        # Spacer is now handled by the main content padding, but we still need one for the fixed header height
         st.markdown('<div style="height: 70px;"></div>', unsafe_allow_html=True) # Spacer
-        nav_col1, nav_col2, nav_col3, nav_col4, _ = st.columns([1, 1, 1, 1, 3])
         
-        # New Case button logic (goes to selector page)
+        # Use columns for navigation and the logout button, ensuring the logout button column is small
+        nav_col1, nav_col2, nav_col3, nav_col4, nav_col_spacer, nav_col_logout = st.columns([1, 1, 1, 1, 2.5, 0.5])
+
+        # Function to create a nav button
+        def nav_button(label, key, target_page, col):
+            # is_active logic can be added here if needed, but for simplicity, we use basic buttons
+            with col:
+                if st.button(label, key=key, help=f"Go to {label}"):
+                    st.session_state.page = target_page
+                    st.rerun()
+
+        # Navigation Buttons
         with nav_col1:
             if st.button("New Case", key="nav_new_case"):
                 st.session_state.page = "new_case_selector"
@@ -272,14 +274,13 @@ def dashboard(username):
         nav_button("Search Cases", "nav_search", "search_cases", nav_col3)
         nav_button("Legal Reference", "nav_legal", "legal_reference", nav_col4)
 
-    # Logout button (separate style)
-    with nav_col_logout:
-        # Use a simple st.button outside the main column block for cleaner styling
-        if st.button("Logout", key="nav_logout"):
-            st.session_state.logged_in = False
-            st.session_state.current_user = ""
-            st.session_state.page = "main"
-            st.rerun()
+        # Logout button (now correctly positioned in its own small column)
+        with nav_col_logout:
+            if st.button("Logout", key="nav_logout"):
+                st.session_state.logged_in = False
+                st.session_state.current_user = ""
+                st.session_state.page = "main"
+                st.rerun()
 
 
     # --- Main Content Router ---
