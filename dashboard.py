@@ -142,13 +142,13 @@ body,[data-testid="stAppViewContainer"]{background:#001928!important;}
     justify-content:flex-start; 
 }
 
-/* Top row (User/Title/Logout) - VERTICALLY CENTERED WITHIN ITS SLICE */
+/* Top row (User/Title/Logout) - SHRINKS TO CONTENT HEIGHT, PINNED TO TOP */
 .fixed-header-content{
     width:100%;
     display:flex;
     justify-content:center;
     align-items:center; /* CRITICAL: Center items vertically */
-    height: 60px; /* Allocate 60px height for the top row */
+    /* REMOVED height: 60px; - Let content define height */
     z-index: 100; /* HIGH Z-INDEX to show above header background */
     position: absolute;
     top: 0px; /* PINNED to the top of the container */
@@ -202,7 +202,7 @@ body,[data-testid="stAppViewContainer"]{background:#001928!important;}
     height: 60px;
     padding-bottom: 5px;
     position: absolute;
-    top: 60px; /* Starts exactly below the 60px tall top row */
+    top: 50px; /* ADJUSTED: Starts below the content-sized title row */
     z-index: 50; 
 }
 
