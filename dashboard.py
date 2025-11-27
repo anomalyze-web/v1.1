@@ -182,33 +182,12 @@ def inject_css():
     /* LOGOUT BUTTON: Smaller and aligned with the title */
     /* Target the container (stButton) and remove all padding/margin/height it might add */
     [data-testid="stButton"][key="header_logout"] {
-        display: flex;
-        justify-content: flex-end; /* Push to the right */
-        width: 100%;
-        margin: 0 !important; /* CRITICAL: Eliminate external margin */
-        padding: 0 !important; /* Eliminate external padding */
-        height: auto !important; /* Let content define height */
+        display: none !important; /* REMOVE THE BUTTON */
     }
     
     /* Target the button element itself for sizing and styling */
     [data-testid="stButton"][key="header_logout"] button {
-        /* Compacting the button */
-        background-color:#1c4868!important;
-        color:white!important;
-        border:1px solid #61a3cd!important; /* Thinner border */
-        border-radius:6px!important; /* Smaller radius */
-        font-size:0.85rem!important; /* Smaller text */
-        font-weight:500!important;
-        width:70px!important; /* Fixed width */
-        height:30px!important; /* Fixed height */
-        padding: 0 8px !important; /* Tight padding */
-        margin:0!important; /* CRITICAL: Eliminate internal margin */
-        transition:all 0.2s!important;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.2)!important; /* Smaller shadow */
-    }
-    [data-testid="stButton"][key="header_logout"] button:hover {
-        background-color:#367588!important;
-        border-color:#fff!important;
+        display: none !important; /* REMOVE THE BUTTON */
     }
 
 
@@ -235,7 +214,7 @@ def inject_css():
     }
 
     /* Ensure no ghost elements appear (We rely on Python code deleting them now) */
-    .user-box, .user-avatar, [data-testid^="stButton"][key^="header_logout"] {
+    .user-box, .user-avatar {
     /* Styles needed for user/logout visibility, removed 'display: none !important;' */
     }
 
@@ -282,7 +261,7 @@ def dashboard(username):
     # 3. FIXED HEADER HTML STRUCTURE (120px tall)
     st.markdown('<div id="fixed-header-container">', unsafe_allow_html=True)
 
-    # --- TOP ROW: User / Title / Logout Button (Small) ---
+    # --- TOP ROW: User / Title / (No Logout Button) ---
     st.markdown('<div class="fixed-header-content">', unsafe_allow_html=True)
 
     user_col, title_col, logout_col = st.columns([2, 6, 2])
@@ -299,12 +278,8 @@ def dashboard(username):
         st.markdown('<div class="dashboard-title">Anomalyze Dashboard</div>', unsafe_allow_html=True)
 
     with logout_col:
-        # Reverting to the button key "header_logout" for specific styling
-        if st.button("Logout", key="header_logout"): 
-            st.session_state.logged_in = False
-            st.session_state.current_user = ""
-            st.session_state.page = "login"
-            st.rerun()
+        # LOGOUT BUTTON REMOVED ENTIRELY per user request.
+        pass
 
     st.markdown('</div>', unsafe_allow_html=True) # Closes fixed-header-content (Top Row)
 
