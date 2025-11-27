@@ -2,26 +2,44 @@ import streamlit as st
 import base64
 from streamlit_extras.stylable_container import stylable_container
 
-from CDR_analysis import show_cdr_analysis
-from IPDR_analysis import show_ipdr_analysis
-from FIREWALL_analysis import show_firewall_analysis
-from CO_Relation_analysis import show_correlation_analysis
-
+# Placeholder functions for analysis modules (simulate external imports)
+# In a real application, you would ensure 'CDR_analysis.py', etc., contain these functions.
 def show_cdr_analysis(case_number, investigator_name, case_name, remarks):
-    st.header("CDR Analysis Page")
-    st.write(f"Case: {case_name}, Investigator: {investigator_name}")
+    st.header("CDR Analysis Page 📞")
+    st.write(f"**Case No:** {case_number}, **Case Name:** {case_name}, **Investigator:** {investigator_name}")
+    st.markdown("---")
+    if st.button("⬅ Back to New Case Selection", key="back_from_cdr_analysis"):
+        st.session_state.page = "new_case_selector"
+        st.rerun()
+
 def show_ipdr_analysis(case_number, investigator_name, case_name, remarks):
-    st.header("IPDR Analysis Page")
-    st.write(f"Case: {case_name}, Investigator: {investigator_name}")
+    st.header("IPDR Analysis Page 🌐")
+    st.write(f"**Case No:** {case_number}, **Case Name:** {case_name}, **Investigator:** {investigator_name}")
+    st.markdown("---")
+    if st.button("⬅ Back to New Case Selection", key="back_from_ipdr_analysis"):
+        st.session_state.page = "new_case_selector"
+        st.rerun()
+
 def show_firewall_analysis(case_number, investigator_name, case_name, remarks):
-    st.header("FIREWALL Analysis Page")
-    st.write(f"Case: {case_name}, Investigator: {investigator_name}")
+    st.header("FIREWALL Analysis Page 🔥")
+    st.write(f"**Case No:** {case_number}, **Case Name:** {case_name}, **Investigator:** {investigator_name}")
+    st.markdown("---")
+    if st.button("⬅ Back to New Case Selection", key="back_from_firewall_analysis"):
+        st.session_state.page = "new_case_selector"
+        st.rerun()
+
 def show_correlation_analysis(case_number, investigator_name, case_name, remarks):
-    st.header("CO-RELATION Analysis Page")
-    st.write(f"Case: {case_name}, Investigator: {investigator_name}")
+    st.header("CO-RELATION Analysis Page 🔗")
+    st.write(f"**Case No:** {case_number}, **Case Name:** {case_name}, **Investigator:** {investigator_name}")
+    st.markdown("---")
+    if st.button("⬅ Back to New Case Selection", key="back_from_correlation_analysis"):
+        st.session_state.page = "new_case_selector"
+        st.rerun()
+
+# --- Helper Functions (Page Views) ---
 
 def show_evidence_library():
-    st.title("Evidence Library")
+    st.title("Evidence Library 🗃️")
     st.markdown("---")
     if st.button("⬅ Back to Dashboard"):
         st.session_state.page = "main"
@@ -34,7 +52,7 @@ def show_evidence_library():
     </div>', unsafe_allow_html=True)
 
 def show_search_cases():
-    st.title("Search Historical Cases")
+    st.title("Search Historical Cases 🔎")
     st.markdown("---")
     if st.button("⬅ Back to Dashboard"):
         st.session_state.page = "main"
@@ -47,7 +65,7 @@ def show_search_cases():
     </div>', unsafe_allow_html=True)
 
 def show_legal_reference():
-    st.title("Legal Reference and Standards")
+    st.title("Legal Reference and Standards ⚖️")
     st.markdown("---")
     if st.button("⬅ Back to Dashboard"):
         st.session_state.page = "main"
@@ -59,11 +77,13 @@ def show_legal_reference():
     </div>', unsafe_allow_html=True)
 
 def show_new_case_selector():
-    st.markdown(f"### Select Data Type for New Case:")
+    st.markdown(f"### Select Data Type for New Case: 💾")
 
     if st.button("⬅ Back to Dashboard", key="back_to_dash_new_case_sel"):
         st.session_state.page = "main"
         st.rerun()
+    
+    st.markdown("---")
 
     col1, col2, col3, col4 = st.columns(4)
 
@@ -113,6 +133,8 @@ def show_new_case_selector():
                 st.session_state.page = "correlation"
                 st.session_state.form_submitted = False
                 st.rerun()
+
+# --- CSS Injection ---
 
 def inject_css():
     st.markdown('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">', unsafe_allow_html=True)
@@ -199,6 +221,7 @@ body,[data-testid="stAppViewContainer"]{background:#001928!important;}
 }
 .main-nav-button button:hover{background-color:#367588!important;border-color:#fff!important;}
 
+/* Adjust content padding to accommodate the 120px header + small top margin */
 .main .block-container{padding-top:130px!important;padding-left:40px;padding-right:40px;padding-bottom:40px;max-width:100%!important;}
 .section-header{font-size:1.8rem;font-weight:700;color:#3a7ba4!important;margin-top:30px;margin-bottom:15px;border-bottom:2px solid #367588;padding-bottom:5px;}
 .placeholder-box{background:#15425b;color:#99aab5;padding:20px;border-radius:12px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,0.15);}
@@ -207,11 +230,12 @@ body,[data-testid="stAppViewContainer"]{background:#001928!important;}
 """
     st.markdown(css_code_compressed, unsafe_allow_html=True)
 
+# --- Core Function ---
 
 def dashboard(username):
     st.set_page_config(page_title="Anomalyze Dashboard", layout="wide")
     
-    # 1. CSS INJECTION BLOCK (Must be called first)
+    # 1. CSS INJECTION BLOCK
     inject_css()
     
     # 2. Session State Initialization
@@ -219,6 +243,7 @@ def dashboard(username):
         st.session_state.page = "main"
     if "form_submitted" not in st.session_state:
         st.session_state.form_submitted = False
+    # Ensure login state is initialized for the logic to work correctly
     if "logged_in" not in st.session_state:
         st.session_state.logged_in = True
     if "current_user" not in st.session_state:
@@ -230,11 +255,11 @@ def dashboard(username):
     # --- TOP ROW: Title Only ---
     st.markdown('<div class="fixed-header-content">', unsafe_allow_html=True)
     
-    # Use a single column to ensure the title is centered, but keep the column structure 
-    # for consistent spacing with the navigation below.
+    # Use columns to position the title
     empty_col_left, title_col, empty_col_right = st.columns([2, 6, 2])
 
     with title_col:
+        # Title is centered by the CSS in fixed-header-content
         st.markdown('<div class="dashboard-title">Anomalyze Dashboard</div>', unsafe_allow_html=True)
 
     st.markdown('</div>', unsafe_allow_html=True) # Closes fixed-header-content (Top Row)
@@ -250,7 +275,6 @@ def dashboard(username):
                     st.session_state.page = target_page
                     st.rerun()
 
-    # CRITICAL FIX: The "New Case" button MUST lead to the selector page where CDR/IPDR buttons are defined.
     nav_button("New Case", "nav_new_case", "new_case_selector", nav_col1) 
     nav_button("Evidence Library", "nav_evidence", "evidence_library", nav_col2)
     nav_button("Search Cases", "nav_search", "search_cases", nav_col3)
@@ -260,19 +284,19 @@ def dashboard(username):
     
     st.markdown('</div>', unsafe_allow_html=True) # Closes fixed-header-container
 
-    # 5. MAIN CONTENT AREA
+    # 4. MAIN CONTENT AREA
     st.markdown('<div class="dashboard-main">', unsafe_allow_html=True)
 
     if st.session_state.page == "main":
         
-        st.markdown('<h2 class="section-header">Bookmarked Cases</h2>', unsafe_allow_html=True)
+        st.markdown('<h2 class="section-header">Bookmarked Cases ⭐</h2>', unsafe_allow_html=True)
         st.markdown('<div class="placeholder-box"><h4>No bookmarked cases available.</h4><p>Use the bookmark feature on case analysis pages to quickly access important investigations.</p></div>', unsafe_allow_html=True)
 
-        st.markdown('<h2 class="section-header">Recent Activity</h2>', unsafe_allow_html=True)
+        st.markdown('<h2 class="section-header">Recent Activity 🕓</h2>', unsafe_allow_html=True)
         st.markdown('<div class="placeholder-box"><h4>No recent cases analyzed.</h4><p>Start a new case using the "New Case" button above to begin your analysis.</p></div>', unsafe_allow_html=True)
 
     elif st.session_state.page == "new_case_selector":
-        show_new_case_selector() # Leads to screen with CDR/IPDR/etc. buttons
+        show_new_case_selector() 
 
     elif st.session_state.page == "evidence_library":
         show_evidence_library()
@@ -281,9 +305,9 @@ def dashboard(username):
     elif st.session_state.page == "legal_reference":
         show_legal_reference()
 
-    # --- Analysis Routing Logic (This handles the form submission and analysis page views) ---
+    # --- Analysis Case Submission Form ---
     elif st.session_state.page in ["cdr", "ipdr", "firewall", "correlation"]:
-        st.markdown(f"### Uploading **{st.session_state.page.upper()}** Case")
+        st.markdown(f"### Uploading **{st.session_state.page.upper()}** Case 📁")
 
         # The Back button needs to check if the user is coming from the form or analysis page
         if st.button("⬅ Back to New Case Selection"):
@@ -292,15 +316,15 @@ def dashboard(username):
             st.rerun()
 
         with st.form(f"{st.session_state.page}_form"):
-            # The original logic used empty string defaults, so we keep them if the key doesn't exist
+            # Preserve state if the user navigates back to the form
             case_number = st.text_input("Case Number", value=st.session_state.get('case_number', ''))
             investigator_name = st.text_input("Investigator Name", value=st.session_state.get('investigator_name', ''))
             case_name = st.text_input("Case Name", value=st.session_state.get('case_name', ''))
             remarks = st.text_area("Remarks", value=st.session_state.get('remarks', ''))
-            submit = st.form_submit_button("Submit")
+            submit = st.form_submit_button("Submit Case Data")
             
             if submit:
-                # Store data in session state upon submission (as in the reference code)
+                # Store data in session state upon submission
                 st.session_state.case_number = case_number
                 st.session_state.investigator_name = investigator_name
                 st.session_state.case_name = case_name
@@ -311,8 +335,7 @@ def dashboard(username):
                     f"{st.session_state.page.upper()} Case '{case_name}' (Case No: {case_number}) uploaded by {investigator_name}."
                 )
 
-        # Analysis button only appears if the form was submitted successfully (as in the reference code)
-        # Note: Added a check for 'case_name' being non-empty to prevent accidental trigger
+        # Analysis button only appears if the form was submitted successfully
         if st.session_state.form_submitted and st.session_state.get('case_name'):
             analysis_labels = {
                 "cdr": "Start CDR Analysis",
@@ -322,11 +345,12 @@ def dashboard(username):
             }
             label = analysis_labels.get(st.session_state.page, "Start Analysis")
             if st.button(label):
-                # Transition to the specific analysis page (as in the reference code)
+                # Transition to the specific analysis page
                 st.session_state.page = f"{st.session_state.page}_analysis"
                 st.session_state.form_submitted = False
                 st.rerun()
 
+    # --- Analysis Page Router ---
     elif st.session_state.page == "cdr_analysis":
         show_cdr_analysis(
             st.session_state.case_number,
@@ -357,3 +381,14 @@ def dashboard(username):
         )
 
     st.markdown('</div>', unsafe_allow_html=True)
+
+# Example usage (assuming this is part of a larger app logic)
+# if __name__ == "__main__":
+#     if "logged_in" not in st.session_state or not st.session_state.logged_in:
+#         # ... login page logic ...
+#         pass # Assume a login function handles this
+#     else:
+#         dashboard(st.session_state.current_user)
+
+# To run this in a simple environment for testing:
+# dashboard("TEST_USER")
