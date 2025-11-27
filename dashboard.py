@@ -104,7 +104,7 @@ def show_new_case_selector():
                 st.session_state.form_submitted = False
                 st.rerun()
 
-# --- CSS Injection Function (REPLACED dashboard_css) ---
+# --- CSS Injection Function ---
 
 def inject_css():
     """Injects global CSS for the fixed header, navigation, and styling."""
@@ -150,8 +150,7 @@ body,[data-testid="stAppViewContainer"]{background:#001928!important;}
 }
 
 /* Removed User Box and Logout Link/Button CSS */
-/* Targeting the original elements to hide them */
-.user-box, .user-avatar, .logout-link, [data-testid="stButton"][key="header_logout"] {
+.user-box, .user-avatar, .logout-link, [data-testid="stButton"][key="header_logout_logic_hidden"] {
     display: none !important; 
 }
 
@@ -170,7 +169,7 @@ body,[data-testid="stAppViewContainer"]{background:#001928!important;}
 }
 
 .dashboard-title{
-    font-size:1.8rem; /* Adjusted slightly from 2rem to match new code */
+    font-size:1.8rem; 
     font-weight:700;
     color:#fff;
     text-align:center;
@@ -207,7 +206,7 @@ body,[data-testid="stAppViewContainer"]{background:#001928!important;}
 def dashboard(username):
     st.set_page_config(page_title="Anomalyze Dashboard", layout="wide")
     
-    # 1. CSS INJECTION (REPLACED dashboard_css)
+    # 1. CSS INJECTION
     inject_css()
 
     # --- Session State Initialization ---
@@ -216,34 +215,19 @@ def dashboard(username):
     if "form_submitted" not in st.session_state:
         st.session_state.form_submitted = False
 
-    # 2. FIXED HEADER HTML STRUCTURE (120px tall) (REPLACED ORIGINAL HEADER)
+    # 2. FIXED HEADER HTML STRUCTURE (120px tall)
     st.markdown('<div id="fixed-header-container">', unsafe_allow_html=True)
 
     # --- TOP ROW: Title Only (centered) ---
     st.markdown('<div class="fixed-header-content">', unsafe_allow_html=True)
     
     # Use columns to manage the horizontal space and center the title content
-    empty_col_left, title_col, empty_col_right = st.columns([2, 6, 2])
+    # Reduced the columns to center the content horizontally after removing user/logout columns
+    empty_col_left, title_col, empty_col_right = st.columns([1, 8, 1])
 
     with title_col:
         st.markdown('<div class="dashboard-title">Anomalyze Dashboard</div>', unsafe_allow_html=True)
 
-    # NOTE: The original user box and logout button are rendered here, 
-    # but the injected CSS (`.user-box, .user-avatar, .logout-link, [data-testid="stButton"][key="header_logout"] { display: none !important; }`)
-    # HIDES THEM as per the new UI design. 
-    # We still need the original logic for the logout button to function if the CSS were removed.
-    
-    # Original user/logout logic (now hidden by CSS):
-    with empty_col_left: # Using a placeholder column for the now hidden elements
-        # Placeholder for logout button's logic
-        if st.button("Logout", key="header_logout_logic_hidden"): # New key to avoid conflict/ensure Streamlit renders the component
-            st.session_state.logged_in = False
-            st.session_state.current_user = ""
-            st.session_state.page = "main"
-            st.rerun()
-
-    # The original user box content is completely overridden/hidden by the new design.
-    
     st.markdown('</div>', unsafe_allow_html=True) # Closes fixed-header-content (Top Row)
     
     
@@ -253,14 +237,12 @@ def dashboard(username):
 
     def nav_button(label, key, target_page, col):
         with col:
-            # We use the new, stylish CSS class from the first block
             with stylable_container(f"nav_button_{key}", css_styles=".main-nav-button"):
-                # KEEPING the original functional Streamlit button logic
                 if st.button(label, key=key, help=f"Go to {label}"):
                     st.session_state.page = target_page
                     st.rerun()
 
-    # The navigation is kept EXACTLY the same (don't even dare to touch the navigation!)
+    # Navigation is kept the exact same
     nav_button("New Case", "nav_new_case", "new_case_selector", nav_col1)
     nav_button("Evidence Library", "nav_evidence", "evidence_library", nav_col2)
     nav_button("Search Cases", "nav_search", "search_cases", nav_col3)
