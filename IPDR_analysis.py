@@ -45,8 +45,7 @@ def show_ipdr_analysis(case_number, investigator_name, case_name, remarks, usern
     # --- SIDEBAR ---
     with col_sidebar:
         with st.container(border=True):
-            st.image("logo1.png", width=180)
-            st.markdown(f"#### 👤 {username.capitalize()}")
+            st.image("logo.png", width=180)
             st.divider()
 
             if st.button(" CDR Analysis"):
@@ -82,8 +81,9 @@ def show_ipdr_analysis(case_number, investigator_name, case_name, remarks, usern
         ]
 
         if 'selected_ipdr_feature' not in st.session_state:
+            # Case Info Header Card: Background color changed to #2f6690
             st.markdown(f"""
-                <div style='background-color:#191970;padding:20px 36px 16px 36px;border-radius:16px 16px 0 0;margin-bottom:1.5rem;'>
+                <div style='background-color:#2f6690;padding:20px 36px 16px 36px;border-radius:16px 16px 0 0;margin-bottom:1.5rem;'>
                     <div style='flex:1;'>
                         <span style='font-size:2.2rem;font-weight:700;color:#fff;'>Case: {case_number}</span><br>
                         <span style='font-size:1.1rem;color:#eae6f7;'>Investigator: {investigator_name}</span><br>
@@ -102,8 +102,9 @@ def show_ipdr_analysis(case_number, investigator_name, case_name, remarks, usern
                         key=f"ipdr_card_{idx}",
                         css_styles="""
                             button {
-                                background-color: #43a047;
-                                opacity: 0.75;
+                                /* Feature Cards: Background color changed to #1c4868 */
+                                background-color: #1c4868; 
+                                opacity: 1.0; /* Removed previous opacity */
                                 color: white;
                                 border-radius: 12px;
                                 height: 180px;
@@ -116,7 +117,8 @@ def show_ipdr_analysis(case_number, investigator_name, case_name, remarks, usern
                                 transition: 0.2s ease-in-out;
                             }
                             button:hover {
-                                background-color: #2e7d32;
+                                /* Adjusted hover color for visual effect */
+                                background-color: #367588;
                                 color: white;
                                 transform: scale(1.02);
                                 opacity: 1.0;
