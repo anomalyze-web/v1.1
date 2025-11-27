@@ -250,7 +250,8 @@ def dashboard(username):
                     st.session_state.page = target_page
                     st.rerun()
 
-    nav_button("New Case", "nav_new_case", "new_case_selector", nav_col1)
+    # CRITICAL FIX: The "New Case" button MUST lead to the selector page where CDR/IPDR buttons are defined.
+    nav_button("New Case", "nav_new_case", "new_case_selector", nav_col1) 
     nav_button("Evidence Library", "nav_evidence", "evidence_library", nav_col2)
     nav_button("Search Cases", "nav_search", "search_cases", nav_col3)
     nav_button("Legal Reference", "nav_legal", "legal_reference", nav_col4)
@@ -271,7 +272,7 @@ def dashboard(username):
         st.markdown('<div class="placeholder-box"><h4>No recent cases analyzed.</h4><p>Start a new case using the "New Case" button above to begin your analysis.</p></div>', unsafe_allow_html=True)
 
     elif st.session_state.page == "new_case_selector":
-        show_new_case_selector()
+        show_new_case_selector() # Leads to screen with CDR/IPDR/etc. buttons
 
     elif st.session_state.page == "evidence_library":
         show_evidence_library()
@@ -280,7 +281,7 @@ def dashboard(username):
     elif st.session_state.page == "legal_reference":
         show_legal_reference()
 
-    # --- RESTORED/FIXED LOGIC START ---
+    # --- Analysis Routing Logic (This handles the form submission and analysis page views) ---
     elif st.session_state.page in ["cdr", "ipdr", "firewall", "correlation"]:
         st.markdown(f"### Uploading **{st.session_state.page.upper()}** Case")
 
@@ -291,7 +292,7 @@ def dashboard(username):
             st.rerun()
 
         with st.form(f"{st.session_state.page}_form"):
-            # Ensure session state variables are checked before accessing them outside the form logic
+            # The original logic used empty string defaults, so we keep them if the key doesn't exist
             case_number = st.text_input("Case Number", value=st.session_state.get('case_number', ''))
             investigator_name = st.text_input("Investigator Name", value=st.session_state.get('investigator_name', ''))
             case_name = st.text_input("Case Name", value=st.session_state.get('case_name', ''))
@@ -311,6 +312,7 @@ def dashboard(username):
                 )
 
         # Analysis button only appears if the form was submitted successfully (as in the reference code)
+        # Note: Added a check for 'case_name' being non-empty to prevent accidental trigger
         if st.session_state.form_submitted and st.session_state.get('case_name'):
             analysis_labels = {
                 "cdr": "Start CDR Analysis",
@@ -353,6 +355,5 @@ def dashboard(username):
             st.session_state.case_name,
             st.session_state.remarks
         )
-    # --- RESTORED/FIXED LOGIC END ---
 
     st.markdown('</div>', unsafe_allow_html=True)
