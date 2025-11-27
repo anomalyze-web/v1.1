@@ -121,6 +121,8 @@ def inject_css():
     # CSS compressed for injection reliability, with height adjustments for the header and navigation.
     css_code_compressed = """
 <style>
+/* Aggressive reset for browser/Streamlit default margins */
+html, body { margin: 0 !important; padding: 0 !important; }
 [data-testid="stAppViewContainer"]{margin-top:0!important;padding-top:0!important;}
 body,[data-testid="stAppViewContainer"]{background:#001928!important;}
 [data-testid="stSidebar"],[data-testid="stSidebarContent"]{display:none!important;}
@@ -140,16 +142,15 @@ body,[data-testid="stAppViewContainer"]{background:#001928!important;}
     flex-direction:column;
     justify-content:flex-start; 
 }
-/* Top row (Title Only) */
+/* Top row (Title Only) - Pinning to the absolute top */
 .fixed-header-content{
     width:100%;
     display:flex;
     justify-content:center; /* Center title horizontally */
     align-items:center;
-    height: 60px; 
-    z-index: 100;
+    z-index: 100; /* Max Z-Axis priority */
     position: absolute;
-    top: -10px; /* AGGRESSIVELY moved up for maximum lift */
+    top: -20px; /* NEW AGGRESSIVE PUSH UP */
     padding-top: 0px; 
 }
 /* Bottom row for Navigation Buttons */
@@ -159,16 +160,17 @@ body,[data-testid="stAppViewContainer"]{background:#001928!important;}
     align-items:center;
     height: 60px;
     padding-bottom: 5px;
-    /* Pinned exactly 50px from the top (60px - 10px offset from the row above) */
+    /* Adjusted top to 40px based on the -20px lift of the top row (120px - 20px buffer from top row - 60px height of fixed content) */
     position: absolute;
-    top: 50px; 
+    top: 40px; 
 }
 
 /* Adjusted title font size and margin to fit the header */
 .dashboard-title{font-size:1.8rem;font-weight:700;color:#fff;text-align:center;margin:0;line-height:1.2;}
 
 /* Removed unused user/logout CSS classes for cleanup */
-.user-box, .user-avatar, [data-testid="stButton"][key="header_logout"] button, [data-testid="stButton"][key="header_logout"] button:hover {
+/* We delete the components in Python, but keep this to ensure no remnants appear */
+.user-box, .user-avatar, [data-testid^="stButton"][key^="header_logout"] {
     display: none !important; 
 }
 
@@ -218,16 +220,14 @@ def dashboard(username):
 
     # --- TOP ROW: Title Only (centered) ---
     st.markdown('<div class="fixed-header-content">', unsafe_allow_html=True)
-    # Using a single column for horizontal centering
+    
+    # Use a single column to ensure the title is centered and the user/logout elements are omitted.
     title_col = st.columns([1])[0] 
 
     with title_col:
-        # Note: Username is no longer needed here, but the function signature requires it.
-        # We only output the title.
         st.markdown('<div class="dashboard-title">Anomalyze Dashboard</div>', unsafe_allow_html=True)
 
-    # Deleting st.columns([2, 6, 2]) and related content simplifies the structure significantly.
-    # The new structure uses only one column for centering the title.
+    # NOTE: The User info and Logout button columns are now fully omitted here.
 
     st.markdown('</div>', unsafe_allow_html=True) # Closes fixed-header-content (Top Row)
     
