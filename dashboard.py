@@ -206,7 +206,7 @@ body,[data-testid="stAppViewContainer"]{background:#001928!important;}
 
 
 def dashboard(username):
-    st.set_page_config(page_title="Anomalyze Dashboard", layout="wide")
+    st.set_page_config(page_title="Dashboard", layout="wide")
     
     # 1. CSS INJECTION BLOCK (Must be called first)
     inject_css()
