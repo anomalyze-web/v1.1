@@ -131,7 +131,7 @@ body,[data-testid="stAppViewContainer"]{background:#001928!important;}
     left:0;
     top:0;
     width:100%;
-    z-index:10000;
+    z-index:10;
     padding:0 40px;
     background:#15425b;
     box-shadow:0 4px 12px rgba(0,0,0,0.3);
@@ -147,7 +147,7 @@ body,[data-testid="stAppViewContainer"]{background:#001928!important;}
     align-items:center;
     height: 60px; 
     /* Z-AXIS FIX: Give this row maximum stacking priority (z-index: 100) */
-    z-index: 100;
+    z-index: 10000;
     /* Y-AXIS FIX: PINNED to absolute top, AGGRESSIVELY moved up by -10px for maximum lift */
     position: absolute;
     top: -10px; /* Pushes the content higher than the container's physical top edge */
