@@ -148,7 +148,6 @@ body,[data-testid="stAppViewContainer"]{background:#001928!important;}
     display:flex;
     justify-content:center;
     align-items:center; /* CRITICAL: Center items vertically */
-    /* REMOVED height: 60px; - Let content define height */
     z-index: 100; /* HIGH Z-INDEX to show above header background */
     position: absolute;
     top: 0px; /* PINNED to the top of the container */
@@ -177,8 +176,26 @@ body,[data-testid="stAppViewContainer"]{background:#001928!important;}
     color:#fff;
 }
 
-/* Logout Button will now use .main-nav-button styling for consistency */
-/* Removed specific styling for [data-testid="stButton"][key="header_logout"] button */
+/* Logout Button (Aggressively styled to match .main-nav-button) */
+[data-testid="stButton"][key="header_logout"] button {
+    /* Copying .main-nav-button styles manually and forcefully */
+    background-color:#1c4868!important;
+    color:white!important;
+    border:2px solid #61a3cd!important;
+    border-radius:8px!important;
+    font-size:1.05rem!important;
+    font-weight:600!important;
+    width:100px!important; /* Keep a sane width */
+    height:40px!important;
+    margin:0!important;
+    transition:all 0.2s!important;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2)!important; /* Match shadow from selector_button_style */
+}
+[data-testid="stButton"][key="header_logout"] button:hover {
+    background-color:#367588!important;
+    border-color:#fff!important;
+}
+
 
 /* Bottom row for Navigation Buttons */
 .fixed-nav-row{
@@ -209,15 +226,16 @@ body,[data-testid="stAppViewContainer"]{background:#001928!important;}
 
 .main-nav-button button{
     background-color:#1c4868!important;
-    color:white;
+    color:white!important;
     border:2px solid #61a3cd!important;
-    border-radius:8px;
-    font-size:1.05rem;
-    font-weight:600;
+    border-radius:8px!important;
+    font-size:1.05rem!important;
+    font-weight:600!important;
     width:100%; /* Ensure full width within its column */
     height:40px;
     margin:0;
     transition:all 0.2s;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Added shadow for consistency */
 }
 .main-nav-button button:hover{background-color:#367588!important;border-color:#fff!important;}
 
@@ -267,13 +285,12 @@ def dashboard(username):
 
     with logout_col:
         st.markdown('<div style="width: 100%; display: flex; justify-content: flex-end; align-items: center;">', unsafe_allow_html=True)
-        # Apply the main-nav-button style to the logout button using stylable_container
-        with stylable_container("logout_button", css_styles=".main-nav-button"):
-            if st.button("Logout", key="header_logout"):
-                st.session_state.logged_in = False
-                st.session_state.current_user = ""
-                st.session_state.page = "login"
-                st.rerun()
+        # We don't need stylable_container here, as we are targeting the button directly via CSS
+        if st.button("Logout", key="header_logout"):
+            st.session_state.logged_in = False
+            st.session_state.current_user = ""
+            st.session_state.page = "login"
+            st.rerun()
         st.markdown('</div>', unsafe_allow_html=True)
 
 
