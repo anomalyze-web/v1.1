@@ -1,19 +1,36 @@
 import streamlit as st
+import base64
 from streamlit_extras.stylable_container import stylable_container
 
-# Mock analysis functions based on user's provided structure
+# Assuming these are external files you have. 
+# If not, the functions defined below will handle the logic.
+try:
+    from CDR_analysis import show_cdr_analysis
+    from IPDR_analysis import show_ipdr_analysis
+    from FIREWALL_analysis import show_firewall_analysis
+    from CO_Relation_analysis import show_correlation_analysis
+except ImportError:
+    pass # Fallback to local definitions if files don't exist
+
+# --- Analysis Page Placeholders (Local Definitions) ---
+# Note: If you import these, remove these definitions or rename them to avoid conflicts.
 def show_cdr_analysis(case_number, investigator_name, case_name, remarks):
     st.header("CDR Analysis Page")
     st.write(f"Case: {case_name}, Investigator: {investigator_name}")
+
 def show_ipdr_analysis(case_number, investigator_name, case_name, remarks):
     st.header("IPDR Analysis Page")
     st.write(f"Case: {case_name}, Investigator: {investigator_name}")
+
 def show_firewall_analysis(case_number, investigator_name, case_name, remarks):
     st.header("FIREWALL Analysis Page")
     st.write(f"Case: {case_name}, Investigator: {investigator_name}")
+
 def show_correlation_analysis(case_number, investigator_name, case_name, remarks):
     st.header("CO-RELATION Analysis Page")
     st.write(f"Case: {case_name}, Investigator: {investigator_name}")
+
+# --- Helper Functions for UI Sections ---
 
 def show_evidence_library():
     st.title("Evidence Library")
@@ -23,10 +40,13 @@ def show_evidence_library():
         st.rerun()
 
     st.text_input("Search Evidence Library", placeholder="Enter keywords, hash values, or file names...")
-    st.markdown('<div style="margin-top: 50px; padding: 30px; border: 1px dashed #555; border-radius: 10px; color: #aaa; text-align: center;">\
-    <h3>No Evidence Uploaded Yet</h3>\
-    <p>Start a new case to upload and categorize digital evidence.</p>\
-    </div>', unsafe_allow_html=True)
+    st.markdown(
+        '<div style="margin-top: 50px; padding: 30px; border: 1px dashed #555; border-radius: 10px; color: #aaa; text-align: center;">\
+        <h3>No Evidence Uploaded Yet</h3>\
+        <p>Start a new case to upload and categorize digital evidence.</p>\
+        </div>', 
+        unsafe_allow_html=True
+    )
 
 def show_search_cases():
     st.title("Search Historical Cases")
@@ -36,10 +56,13 @@ def show_search_cases():
         st.rerun()
 
     st.text_input("Search Cases", placeholder="Enter case number, investigator name, or keywords...")
-    st.markdown('<div style="margin-top: 50px; padding: 30px; border: 1px dashed #555; border-radius: 10px; color: #aaa; text-align: center;">\
-    <h3>No Cases Archived</h3>\
-    <p>Completed case analyses will appear here for future reference and searching.</p>\
-    </div>', unsafe_allow_html=True)
+    st.markdown(
+        '<div style="margin-top: 50px; padding: 30px; border: 1px dashed #555; border-radius: 10px; color: #aaa; text-align: center;">\
+        <h3>No Cases Archived</h3>\
+        <p>Completed case analyses will appear here for future reference and searching.</p>\
+        </div>', 
+        unsafe_allow_html=True
+    )
 
 def show_legal_reference():
     st.title("Legal Reference and Standards")
@@ -48,10 +71,13 @@ def show_legal_reference():
         st.session_state.page = "main"
         st.rerun()
 
-    st.markdown('<div style="padding: 30px; border: 1px dashed #555; border-radius: 10px; color: #aaa;">\
-    <p>This section is reserved for relevant legal statutes, compliance documentation, and digital forensics standards.</p>\
-    <p>Content to be integrated...</p>\
-    </div>', unsafe_allow_html=True)
+    st.markdown(
+        '<div style="padding: 30px; border: 1px dashed #555; border-radius: 10px; color: #aaa;">\
+        <p>This section is reserved for relevant legal statutes, compliance documentation, and digital forensics standards.</p>\
+        <p>Content to be integrated...</p>\
+        </div>', 
+        unsafe_allow_html=True
+    )
 
 def show_new_case_selector():
     st.markdown(f"### Select Data Type for New Case:")
@@ -64,20 +90,20 @@ def show_new_case_selector():
 
     selector_button_style = """
     button {
-    background-color: #1c4868 !important;
-    color: #fff !important;
-    border: 2px solid #61a3cd !important;
-    border-radius: 12px;
-    height: 60px;
-    font-size: 1.1rem;
-    width: 100%;
-    margin-bottom: 12px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    transition: background-color 0.2s, border-color 0.2s;
+        background-color: #1c4868 !important;
+        color: #fff !important;
+        border: 2px solid #61a3cd !important;
+        border-radius: 12px;
+        height: 60px;
+        font-size: 1.1rem;
+        width: 100%;
+        margin-bottom: 12px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        transition: background-color 0.2s, border-color 0.2s;
     }
     button:hover {
-    background-color: #367588 !important;
-    border: 2px solid #fff !important;
+        background-color: #367588 !important;
+        border: 2px solid #fff !important;
     }
     """
 
@@ -123,106 +149,107 @@ def inject_css():
 
     /* HEADER HEIGHT 120px to hold two rows (Title/User/Logout + Nav Buttons) */
     #fixed-header-container{
-    position:fixed;
-    left:0;
-    top:0;
-    width:100%;
-    z-index:10; /* BASE Z-INDEX for the background */
-    padding:0 40px;
-    background:rgba(21, 66, 91, 0.3); /* INCREASED TRANSPARENCY */
-    box-shadow:0 4px 12px rgba(0,0,0,0.3);
-    height:120px;
-    display:flex;
-    flex-direction:column;
-    justify-content:flex-start;
+        position:fixed;
+        left:0;
+        top:0;
+        width:100%;
+        z-index:10; /* BASE Z-INDEX for the background */
+        padding:0 40px;
+        background:rgba(21, 66, 91, 0.95); /* INCREASED TRANSPARENCY */
+        box-shadow:0 4px 12px rgba(0,0,0,0.3);
+        height:120px;
+        display:flex;
+        flex-direction:column;
+        justify-content:flex-start;
     }
 
-    /* Top row (User/Title/Logout) - This is where we align the title and the small button */
+    /* Top row (User/Title/Logout) - SHRINKS TO CONTENT HEIGHT, PINNED TO TOP */
     .fixed-header-content{
-    width:100%;
-    display:flex;
-    justify-content:center;
-    align-items:center; /* CRITICAL: Center items vertically */
-    z-index: 100; 
-    position: absolute;
-    top: 0px; 
-    padding-top: 5px; 
-    padding-bottom: 5px;
-    height: 60px; /* Keep this height consistent with fixed-nav-row placement */
+        width:100%;
+        display:flex;
+        justify-content:center;
+        align-items:center; /* CRITICAL: Center items vertically */
+        z-index: 100; /* HIGH Z-INDEX to show above header background */
+        position: absolute;
+        top: 0px; /* PINNED to the top of the container */
+        padding-top: 5px; /* Minimal top padding */
+        padding-bottom: 5px;
     }
 
     /* User Box (Avatar and Username) */
     .user-box {
-    font-size:1.2rem;
-    font-weight:600;
-    color:#fff;
-    display:flex;
-    align-items:center;
-    gap:8px;
+        font-size:1.2rem;
+        font-weight:600;
+        color:#fff;
+        display:flex;
+        align-items:center;
+        gap:8px;
     }
     .user-avatar {
-    width:36px;
-    height:36px;
-    background:#367588;
-    border-radius:50%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:1.2rem;
-    color:#fff;
-    }
-    
-    /* LOGOUT BUTTON: Smaller and aligned with the title */
-    /* Target the container (stButton) and remove all padding/margin/height it might add */
-    [data-testid="stButton"][key="header_logout"] {
-        display: none !important; /* REMOVE THE BUTTON */
-    }
-    
-    /* Target the button element itself for sizing and styling */
-    [data-testid="stButton"][key="header_logout"] button {
-        display: none !important; /* REMOVE THE BUTTON */
+        width:36px;
+        height:36px;
+        background:#367588;
+        border-radius:50%;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        font-size:1.2rem;
+        color:#fff;
     }
 
+    /* Logout Button (Aggressively styled to match .main-nav-button) */
+    [data-testid="stButton"][key="header_logout"] button {
+        background-color:#1c4868!important;
+        color:white!important;
+        border:2px solid #61a3cd!important;
+        border-radius:8px!important;
+        font-size:1.05rem!important;
+        font-weight:600!important;
+        width:100px!important; /* Keep a sane width */
+        height:40px!important;
+        margin:0!important;
+        transition:all 0.2s!important;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2)!important; 
+    }
+    [data-testid="stButton"][key="header_logout"] button:hover {
+        background-color:#367588!important;
+        border-color:#fff!important;
+    }
 
     /* Bottom row for Navigation Buttons */
     .fixed-nav-row{
-    width:100%;
-    display:flex;
-    align-items:center;
-    height: 60px;
-    padding-bottom: 5px;
-    position: absolute;
-    top: 50px; /* Starts below the 60px top row */
-    z-index: 50;
+        width:100%;
+        display:flex;
+        align-items:center;
+        height: 60px;
+        padding-bottom: 5px;
+        position: absolute;
+        top: 50px; /* ADJUSTED: Starts below the content-sized title row */
+        z-index: 50;
     }
 
     .dashboard-title{
-    font-size:1.8rem;
-    font-weight:700;
-    color:#fff;
-    text-align:center;
-    margin:0;
-    line-height:1.2;
-    padding-top: 0px;
-    }
-
-    /* Ensure no ghost elements appear (We rely on Python code deleting them now) */
-    .user-box, .user-avatar {
-    /* Styles needed for user/logout visibility, removed 'display: none !important;' */
+        font-size:1.8rem;
+        font-weight:700;
+        color:#fff;
+        text-align:center;
+        margin:0;
+        line-height:1.2;
+        padding-top: 0px;
     }
 
     .main-nav-button button{
-    background-color:#1c4868!important;
-    color:white!important;
-    border:2px solid #61a3cd!important;
-    border-radius:8px!important;
-    font-size:1.05rem!important;
-    font-weight:600!important;
-    width:100%; /* Ensure full width within its column */
-    height:40px;
-    margin:0;
-    transition:all 0.2s;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Added shadow for consistency */
+        background-color:#1c4868!important;
+        color:white!important;
+        border:2px solid #61a3cd!important;
+        border-radius:8px!important;
+        font-size:1.05rem!important;
+        font-weight:600!important;
+        width:100%; /* Ensure full width within its column */
+        height:40px;
+        margin:0;
+        transition:all 0.2s;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2); 
     }
     .main-nav-button button:hover{background-color:#367588!important;border-color:#fff!important;}
 
@@ -235,6 +262,7 @@ def inject_css():
     st.markdown(css_code_compressed, unsafe_allow_html=True)
 
 
+# --- MAIN DASHBOARD FUNCTION ---
 def dashboard(username):
     st.set_page_config(page_title="Anomalyze Dashboard", layout="wide")
 
@@ -254,7 +282,7 @@ def dashboard(username):
     # 3. FIXED HEADER HTML STRUCTURE (120px tall)
     st.markdown('<div id="fixed-header-container">', unsafe_allow_html=True)
 
-    # --- TOP ROW: User / Title / (No Logout Button) ---
+    # --- TOP ROW: User / Title / Logout ---
     st.markdown('<div class="fixed-header-content">', unsafe_allow_html=True)
 
     user_col, title_col, logout_col = st.columns([2, 6, 2])
@@ -271,8 +299,13 @@ def dashboard(username):
         st.markdown('<div class="dashboard-title">Anomalyze Dashboard</div>', unsafe_allow_html=True)
 
     with logout_col:
-        # LOGOUT BUTTON REMOVED ENTIRELY per user request.
-        pass
+        st.markdown('<div style="width: 100%; display: flex; justify-content: flex-end; align-items: center;">', unsafe_allow_html=True)
+        if st.button("Logout", key="header_logout"):
+            st.session_state.logged_in = False
+            st.session_state.current_user = ""
+            st.session_state.page = "login"
+            st.rerun()
+        st.markdown('</div>', unsafe_allow_html=True)
 
     st.markdown('</div>', unsafe_allow_html=True) # Closes fixed-header-content (Top Row)
 
@@ -293,17 +326,14 @@ def dashboard(username):
     nav_button("Legal Reference", "nav_legal", "legal_reference", nav_col4)
 
     st.markdown('</div>', unsafe_allow_html=True) # Closes fixed-nav-row (Bottom Row)
-
     st.markdown('</div>', unsafe_allow_html=True) # Closes fixed-header-container
 
     # 5. MAIN CONTENT AREA
     st.markdown('<div class="dashboard-main">', unsafe_allow_html=True)
 
     if st.session_state.page == "main":
-
         st.markdown('<h2 class="section-header">Bookmarked Cases</h2>', unsafe_allow_html=True)
         st.markdown('<div class="placeholder-box"><h4>No bookmarked cases available.</h4><p>Use the bookmark feature on case analysis pages to quickly access important investigations.</p></div>', unsafe_allow_html=True)
-
         st.markdown('<h2 class="section-header">Recent Activity</h2>', unsafe_allow_html=True)
         st.markdown('<div class="placeholder-box"><h4>No recent cases analyzed.</h4><p>Start a new case using the "New Case" button above to begin your analysis.</p></div>', unsafe_allow_html=True)
 
@@ -312,8 +342,10 @@ def dashboard(username):
 
     elif st.session_state.page == "evidence_library":
         show_evidence_library()
+
     elif st.session_state.page == "search_cases":
         show_search_cases()
+
     elif st.session_state.page == "legal_reference":
         show_legal_reference()
 
@@ -331,10 +363,9 @@ def dashboard(username):
             case_name = st.text_input("Case Name")
             remarks = st.text_area("Remarks")
             submit = st.form_submit_button("Submit")
+            
             if submit:
-                st.success(
-                    f"{st.session_state.page.upper()} Case '{case_name}' (Case No: {case_number}) uploaded by {investigator_name}."
-                )
+                st.success(f"{st.session_state.page.upper()} Case '{case_name}' (Case No: {case_number}) uploaded by {investigator_name}.")
                 st.session_state.form_submitted = True
                 st.session_state.case_number = case_number
                 st.session_state.investigator_name = investigator_name
@@ -349,6 +380,7 @@ def dashboard(username):
                 "correlation": "Start CO-RELATION Analysis"
             }
             label = analysis_labels.get(st.session_state.page, "Start Analysis")
+            
             if st.button(label, key=f"start_{st.session_state.page}_analysis"):
                 st.session_state.page = f"{st.session_state.page}_analysis"
                 st.session_state.form_submitted = False
@@ -384,3 +416,7 @@ def dashboard(username):
         )
 
     st.markdown('</div>', unsafe_allow_html=True)
+
+# To run this, you would typically call:
+if __name__ == "__main__":
+    dashboard("Officer_Name")
