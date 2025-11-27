@@ -136,7 +136,7 @@ def inject_css():
     width:100%;
     z-index:10; /* BASE Z-INDEX for the background */
     padding:0 40px;
-    background:rgba(21, 66, 91, 0.3); /* INCREASED TRANSPARENCY */
+    background:rgba(21, 66, 91, 0.95); /* INCREASED TRANSPARENCY */
     box-shadow:0 4px 12px rgba(0,0,0,0.3);
     height:120px;
     display:flex;
@@ -144,17 +144,18 @@ def inject_css():
     justify-content:flex-start;
     }
 
-    /* Top row (User/Title/Logout) - SHRINKS TO CONTENT HEIGHT, PINNED TO TOP */
+    /* Top row (User/Title/Logout) - This is where we align the title and the small button */
     .fixed-header-content{
     width:100%;
     display:flex;
     justify-content:center;
     align-items:center; /* CRITICAL: Center items vertically */
-    z-index: 100; /* HIGH Z-INDEX to show above header background */
+    z-index: 100; 
     position: absolute;
-    top: 0px; /* PINNED to the top of the container */
-    padding-top: 5px; /* Minimal top padding */
+    top: 0px; 
+    padding-top: 5px; 
     padding-bottom: 5px;
+    height: 60px; /* Keep this height consistent with fixed-nav-row placement */
     }
 
     /* User Box (Avatar and Username) */
@@ -178,39 +179,34 @@ def inject_css():
     color:#fff;
     }
     
-    /* LOGOUT LINK STYLE: Highly aggressive CSS to make the st.button look like a hyperlink */
-    [data-testid="stButton"][key="header_logout_link"] {
-        /* Container Div Styling */
+    /* LOGOUT BUTTON: Smaller and aligned with the title */
+    [data-testid="stButton"][key="header_logout"] {
         display: flex;
-        justify-content: flex-end;
+        justify-content: flex-end; /* Push to the right */
         width: 100%;
         margin-top: 0 !important;
-        padding: 0 !important;
+        /* Aligns the button vertically with the middle of the title/user box */
+        align-self: center; 
     }
 
-    [data-testid="stButton"][key="header_logout_link"] button {
-        /* Actual Button Element Styling */
-        background: none !important;
-        border: none !important;
-        color: #61a3cd !important; /* Link color */
-        text-decoration: underline;
-        font-size: 1.1rem !important;
-        font-weight: 500 !important;
-        height: auto !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        box-shadow: none !important;
-        transition: color 0.2s;
-        line-height: 1.2;
-        cursor: pointer;
-        /* Ensure no button background on hover/active */
-        background-color: transparent !important; 
+    [data-testid="stButton"][key="header_logout"] button {
+        /* Compacting the button */
+        background-color:#1c4868!important;
+        color:white!important;
+        border:1px solid #61a3cd!important; /* Thinner border */
+        border-radius:6px!important; /* Smaller radius */
+        font-size:0.85rem!important; /* Smaller text */
+        font-weight:500!important;
+        width:70px!important; /* Fixed width */
+        height:30px!important; /* Fixed height */
+        padding: 0 8px !important; /* Tight padding */
+        margin:0!important;
+        transition:all 0.2s!important;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2)!important; /* Smaller shadow */
     }
-    
-    [data-testid="stButton"][key="header_logout_link"] button:hover {
-        color: #fff !important; /* White on hover */
-        background: none !important;
-        text-decoration: none;
+    [data-testid="stButton"][key="header_logout"] button:hover {
+        background-color:#367588!important;
+        border-color:#fff!important;
     }
 
 
@@ -222,7 +218,7 @@ def inject_css():
     height: 60px;
     padding-bottom: 5px;
     position: absolute;
-    top: 50px; /* ADJUSTED: Starts below the content-sized title row */
+    top: 50px; /* Starts below the 60px top row */
     z-index: 50;
     }
 
@@ -284,7 +280,7 @@ def dashboard(username):
     # 3. FIXED HEADER HTML STRUCTURE (120px tall)
     st.markdown('<div id="fixed-header-container">', unsafe_allow_html=True)
 
-    # --- TOP ROW: User / Title / Logout Link ---
+    # --- TOP ROW: User / Title / Logout Button (Small) ---
     st.markdown('<div class="fixed-header-content">', unsafe_allow_html=True)
 
     user_col, title_col, logout_col = st.columns([2, 6, 2])
@@ -301,8 +297,8 @@ def dashboard(username):
         st.markdown('<div class="dashboard-title">Anomalyze Dashboard</div>', unsafe_allow_html=True)
 
     with logout_col:
-        # This is the st.button that acts as the hyperlink
-        if st.button("Logout", key="header_logout_link"):
+        # Reverting to the button key "header_logout" for specific styling
+        if st.button("Logout", key="header_logout"): 
             st.session_state.logged_in = False
             st.session_state.current_user = ""
             st.session_state.page = "login"
