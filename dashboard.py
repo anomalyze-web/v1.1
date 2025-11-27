@@ -134,7 +134,7 @@ body,[data-testid="stAppViewContainer"]{background:#001928!important;}
     width:100%;
     z-index:10; /* BASE Z-INDEX for the background */
     padding:0 40px;
-    background:rgba(21, 66, 91, 0.3); 
+    background:rgba(21, 66, 91, 0.95); 
     box-shadow:0 4px 12px rgba(0,0,0,0.3);
     height:120px; /* RESTORED 120px HEIGHT */
     display:flex;
@@ -237,8 +237,6 @@ def dashboard(username):
     with title_col:
         st.markdown('<div class="dashboard-title">Anomalyze Dashboard</div>', unsafe_allow_html=True)
 
-    # Note: User/Logout Python logic is removed/hidden.
-
     st.markdown('</div>', unsafe_allow_html=True) # Closes fixed-header-content (Top Row)
     
     # --- BOTTOM ROW: Navigation Buttons ---
@@ -282,9 +280,11 @@ def dashboard(username):
     elif st.session_state.page == "legal_reference":
         show_legal_reference()
 
+    # --- RESTORED LOGIC START ---
     elif st.session_state.page in ["cdr", "ipdr", "firewall", "correlation"]:
         st.markdown(f"### Uploading **{st.session_state.page.upper()}** Case")
 
+        # The Back button needs to check if the user is coming from the form or analysis page
         if st.button("⬅ Back to New Case Selection"):
             st.session_state.page = "new_case_selector"
             st.session_state.form_submitted = False
@@ -314,7 +314,7 @@ def dashboard(username):
                 "correlation": "Start CO-RELATION Analysis"
             }
             label = analysis_labels.get(st.session_state.page, "Start Analysis")
-            if st.button(label, key=f"start_{st.session_state.page}_analysis"):
+            if st.button(label):
                 st.session_state.page = f"{st.session_state.page}_analysis"
                 st.session_state.form_submitted = False
                 st.rerun()
@@ -347,5 +347,6 @@ def dashboard(username):
             st.session_state.case_name,
             st.session_state.remarks
         )
+    # --- RESTORED LOGIC END ---
 
     st.markdown('</div>', unsafe_allow_html=True)
