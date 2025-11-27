@@ -86,8 +86,9 @@ def show_cdr_analysis(case_number, investigator_name, case_name, remarks, userna
         ]
 
         if 'selected_feature' not in st.session_state:
+            # Change Case Info Header background color to match new card color
             st.markdown(f"""
-                <div style='background-color:#191970;padding:20px 36px 16px 36px;border-radius:16px 16px 0 0;margin-bottom:1.5rem;'>
+                <div style='background-color:#1c4868;padding:20px 36px 16px 36px;border-radius:16px 16px 0 0;margin-bottom:1.5rem;'>
                     <div style='flex:1;'>
                         <span style='font-size:2.2rem;font-weight:700;color:#fff;'>Case: {case_number}</span><br>
                         <span style='font-size:1.1rem;color:#eae6f7;'>Investigator: {investigator_name}</span><br>
@@ -107,7 +108,8 @@ def show_cdr_analysis(case_number, investigator_name, case_name, remarks, userna
                         key=f"card_{idx}",
                         css_styles="""
                             button {
-                                background-color: #191970;
+                                /* CHANGED BACKGROUND COLOR */
+                                background-color: #1c4868; 
                                 color: white;
                                 border-radius: 12px;
                                 height: 180px;
@@ -120,8 +122,9 @@ def show_cdr_analysis(case_number, investigator_name, case_name, remarks, userna
                                 transition: 0.2s ease-in-out;
                             }
                             button:hover {
-                                background-color: #f0a73b;
-                                color: #191970;
+                                /* Adjusted hover color for better contrast */
+                                background-color: #367588; 
+                                color: #fff; 
                                 transform: scale(1.02);
                                 cursor: pointer;
                             }
@@ -143,6 +146,7 @@ def show_cdr_analysis(case_number, investigator_name, case_name, remarks, userna
 
             if os.path.exists(feature_path):
                 try:
+                    # Note: Executing arbitrary files might be a security risk in a real-world scenario.
                     with open(feature_path, "r") as f:
                         exec(f.read(), globals())
                 except Exception as e:
