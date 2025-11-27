@@ -178,8 +178,18 @@ def inject_css():
     color:#fff;
     }
     
-    /* LOGOUT LINK STYLE (Replaces the old aggressive button CSS) */
+    /* LOGOUT LINK STYLE: Highly aggressive CSS to make the st.button look like a hyperlink */
+    [data-testid="stButton"][key="header_logout_link"] {
+        /* Container Div Styling */
+        display: flex;
+        justify-content: flex-end;
+        width: 100%;
+        margin-top: 0 !important;
+        padding: 0 !important;
+    }
+
     [data-testid="stButton"][key="header_logout_link"] button {
+        /* Actual Button Element Styling */
         background: none !important;
         border: none !important;
         color: #61a3cd !important; /* Link color */
@@ -193,19 +203,14 @@ def inject_css():
         transition: color 0.2s;
         line-height: 1.2;
         cursor: pointer;
-        /* Ensure it aligns right within its container */
-        justify-content: flex-end;
+        /* Ensure no button background on hover/active */
+        background-color: transparent !important; 
     }
+    
     [data-testid="stButton"][key="header_logout_link"] button:hover {
         color: #fff !important; /* White on hover */
         background: none !important;
         text-decoration: none;
-    }
-    /* Ensure the column container for the link is right-aligned */
-    [data-testid="stButton"][key="header_logout_link"] {
-        display: flex;
-        justify-content: flex-end;
-        width: 100%;
     }
 
 
@@ -296,7 +301,7 @@ def dashboard(username):
         st.markdown('<div class="dashboard-title">Anomalyze Dashboard</div>', unsafe_allow_html=True)
 
     with logout_col:
-        # Replaced the aggressively styled button with a button styled as a link via CSS
+        # This is the st.button that acts as the hyperlink
         if st.button("Logout", key="header_logout_link"):
             st.session_state.logged_in = False
             st.session_state.current_user = ""
