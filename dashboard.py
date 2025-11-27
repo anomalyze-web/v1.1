@@ -2,11 +2,7 @@ import streamlit as st
 import base64
 from streamlit_extras.stylable_container import stylable_container
 
-from CDR_analysis import show_cdr_analysis
-from IPDR_analysis import show_ipdr_analysis
-from FIREWALL_analysis import show_firewall_analysis
-from CO_Relation_analysis import show_correlation_analysis
-
+# Dummy functions for the analysis pages (assuming they are in other files)
 def show_cdr_analysis(case_number, investigator_name, case_name, remarks):
     st.header("CDR Analysis Page")
     st.write(f"Case: {case_name}, Investigator: {investigator_name}")
@@ -121,50 +117,46 @@ def inject_css():
     # CSS compressed for injection reliability, with height adjustments for the header and navigation.
     css_code_compressed = """
 <style>
+/* 1. Base Streamlit Overrides */
 [data-testid="stAppViewContainer"]{margin-top:0!important;padding-top:0!important;}
 body,[data-testid="stAppViewContainer"]{background:#001928!important;}
 [data-testid="stSidebar"],[data-testid="stSidebarContent"]{display:none!important;}
 
-/* HEADER HEIGHT 120px to hold two rows (Title/Logout + Nav Buttons) */
+/* 2. FIXED HEADER CONTAINER (Parent) - Z-index fixed here */
 #fixed-header-container{
     position:fixed;
     left:0;
     top:0;
     width:100%;
-    z-index:10;
+    z-index:9999; /* HIGHER Z-INDEX TO BE ON TOP */
     padding:0 40px;
     background:#15425b;
     box-shadow:0 4px 12px rgba(0,0,0,0.3);
     height:120px;
     display:flex;
-    flex-direction:column;
+    flex-direction:column; /* Allows children to stack */
     justify-content:flex-start; 
 }
-/* Top row for User/Title/Logout */
+/* 3. TOP ROW: User/Title/Logout (Now relies on flex-flow) */
 .fixed-header-content{
     width:100%;
     display:flex;
     align-items:center;
-    height: 60px; 
-    /* Z-AXIS FIX: Give this row maximum stacking priority (z-index: 100) */
-    z-index: 10000;
-    /* Y-AXIS FIX: PINNED to absolute top, AGGRESSIVELY moved up by -10px for maximum lift */
-    position: absolute;
-    top: -10px; /* Pushes the content higher than the container's physical top edge */
-    padding-top: 0px; 
+    height: 60px; /* Fixed height for stacking */
+    padding-top: 5px; /* Small buffer */
+    /* REMOVED: position: absolute; z-index: 10000; top: -10px; */
 }
-/* Bottom row for Navigation Buttons */
+/* 4. BOTTOM ROW: Navigation Buttons (Now relies on flex-flow) */
 .fixed-nav-row{
     width:100%;
     display:flex;
     align-items:center;
-    height: 60px;
+    height: 60px; /* Fixed height for stacking */
     padding-bottom: 5px;
-    /* Pinned exactly 50px from the top (60px - 10px offset from the row above) */
-    position: absolute;
-    top: 50px; 
+    /* REMOVED: position: absolute; top: 50px; */
 }
 
+/* 5. CONTENT STYLES */
 /* Adjusted title font size and margin to fit the header */
 .dashboard-title{font-size:1.8rem;font-weight:700;color:#fff;text-align:center;margin:0;line-height:1.2;}
 .user-box{font-size:1.0rem;font-weight:600;color:#fff;display:flex;align-items:center;gap:8px;}
@@ -189,7 +181,7 @@ body,[data-testid="stAppViewContainer"]{background:#001928!important;}
 [data-testid="stButton"][key="header_logout"] button{background-color:#367588;color:white;border-radius:8px;font-size:0.9rem;font-weight:600;width:80px;padding:5px 10px;height:30px;margin:0;transition:background-color 0.2s;border:none;}
 [data-testid="stButton"][key="header_logout"] button:hover{background-color:#e57373;}
 
-/* Main Content Area Padding - Adjusted to clear 120px header + 10px buffer */
+/* 6. MAIN CONTENT AREA - Padding adjusted to clear the 120px fixed header */
 .main .block-container{padding-top:130px!important;padding-left:40px;padding-right:40px;padding-bottom:40px;max-width:100%!important;}
 .section-header{font-size:1.8rem;font-weight:700;color:#3a7ba4!important;margin-top:30px;margin-bottom:15px;border-bottom:2px solid #367588;padding-bottom:5px;}
 .placeholder-box{background:#15425b;color:#99aab5;padding:20px;border-radius:12px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,0.15);}
@@ -215,10 +207,10 @@ def dashboard(username):
     if "current_user" not in st.session_state:
         st.session_state.current_user = username
 
-    # 3. FIXED HEADER HTML STRUCTURE (Now 120px tall, holds all header elements)
+    # 3. FIXED HEADER HTML STRUCTURE (120px tall, uses flex-direction: column)
     st.markdown('<div id="fixed-header-container">', unsafe_allow_html=True)
 
-    # --- TOP ROW: User, Title, Logout ---
+    # --- TOP ROW: User, Title, Logout (Now flows naturally as the first child) ---
     st.markdown('<div class="fixed-header-content">', unsafe_allow_html=True)
     user_col, title_col, logout_col = st.columns([2, 6, 2])
 
@@ -245,7 +237,7 @@ def dashboard(username):
 
     st.markdown('</div>', unsafe_allow_html=True) # Closes fixed-header-content (Top Row)
     
-    # --- BOTTOM ROW: Navigation Buttons ---
+    # --- BOTTOM ROW: Navigation Buttons (Now flows naturally as the second child) ---
     st.markdown('<div class="fixed-nav-row">', unsafe_allow_html=True)
     nav_col1, nav_col2, nav_col3, nav_col4 = st.columns(4)
 
