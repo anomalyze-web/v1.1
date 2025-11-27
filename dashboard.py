@@ -231,7 +231,7 @@ def dashboard(username):
     title_col = st.columns([1])[0] 
 
     with title_col:
-        st.markdown('<div class="dashboard-title">Anomalyze Dashboard</div>', unsafe_allow_html=True)
+        st.markdown('<div class="dashboard-title">Dashboard</div>', unsafe_allow_html=True)
 
     st.markdown('</div>', unsafe_allow_html=True) # Closes fixed-header-content (Top Row)
     
