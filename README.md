@@ -10,13 +10,13 @@ The engine powers **52+ forensic algorithms** and integrates **7 specialized Mac
 
 Anomalyze moves beyond static rule-based detection by employing ML models to catch zero-day anomalies and behavioral deviations:
 
-* ** DNS Tunneling Detection:** Identifies covert data exfiltration attempts hiding within DNS queries.
-* ** Behavioral Baselining:** Establishes "normal" user behavior profiles in firewall logs to flag subtle deviations.
-* ** IP Clustering Detection:** Uses unsupervised learning to detect coordinated botnet-like behavior across multiple IPs.
-* ** Data Transfer Pattern Tracking:** Classifies network traffic to spot anomalous volume spikes indicative of data theft.
-* ** Time-Based Access Patterns:** Learns typical user login hours to detect "impossible" or off-hour access.
-* ** Burst Call Detection:** Identifies rapid-fire, high-frequency call patterns often associated with robocalling or fraud.
-* ** HTTP Status Code Analysis:** Detects scanning attacks and server misconfigurations via status code distribution anomalies.
+* **DNS Tunneling Detection:** Identifies covert data exfiltration attempts hiding within DNS queries.
+* **Behavioral Baselining:** Establishes "normal" user behavior profiles in firewall logs to flag subtle deviations.
+* **IP Clustering Detection:** Uses unsupervised learning to detect coordinated botnet-like behavior across multiple IPs.
+* **Data Transfer Pattern Tracking:** Classifies network traffic to spot anomalous volume spikes indicative of data theft.
+* **Time-Based Access Patterns:** Learns typical user login hours to detect "impossible" or off-hour access.
+* **Burst Call Detection:** Identifies rapid-fire, high-frequency call patterns often associated with robocalling or fraud.
+* **HTTP Status Code Analysis:** Detects scanning attacks and server misconfigurations via status code distribution anomalies.
 
 ---
 
