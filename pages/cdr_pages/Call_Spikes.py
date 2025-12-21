@@ -6,10 +6,7 @@ import os
 import logging
 from datetime import datetime
 
-# ==========================================
 # 1. CONFIGURATION & CONSTANTS
-# ==========================================
-
 REQUIRED_COLUMNS = ['calling_number', 'called_number', 'start_time', 'call_direction']
 
 CDR_COLUMN_MAP = {
@@ -19,10 +16,7 @@ CDR_COLUMN_MAP = {
     "call_direction": ["call_direction", "direction", "type", "call_type"]
 }
 
-# ==========================================
 # 2. DATA NORMALIZATION & VALIDATION
-# ==========================================
-
 def normalize_columns(df: pd.DataFrame, column_map: dict) -> pd.DataFrame:
     """Standardizes column names based on a mapping dictionary."""
     col_rename = {}
@@ -39,7 +33,7 @@ def validate_input(df: pd.DataFrame) -> pd.DataFrame:
     """Checks if the dataframe contains necessary columns."""
     missing = [col for col in REQUIRED_COLUMNS if col not in df.columns]
     if missing:
-        st.error(f"❌ Missing required columns: {missing}")
+        st.error(f"⚠️ Missing required columns: {missing}")
         st.stop()
     return df
 
@@ -49,24 +43,18 @@ def parse_cdr(df: pd.DataFrame) -> pd.DataFrame:
     if 'start_time' in df.columns:
         df['start_time'] = pd.to_datetime(df['start_time'], errors='coerce')
     return df
-
-# ==========================================
+    
 # 3. ANALYSIS LOGIC (CORE ENGINE)
-# ==========================================
-
 def analyze_logic(df: pd.DataFrame, intl_threshold: int, spike_threshold: int):
     """
     Core Logic: Separated from UI for easier testing and modularity.
     Returns: Tuple(intl_suspects, spike_suspects)
     """
-    # Filter for outgoing calls (Mobile Originating)
     outgoing_df = df[df['call_direction'].astype(str).str.upper().isin(['MO', 'OUTGOING', '1'])].copy()
     
     if outgoing_df.empty:
         return pd.DataFrame(), pd.DataFrame()
 
-    # Logic A: International Calls (Not starting with 91)
-    # Note: '91' is the assumed home country code.
     intl_calls = outgoing_df[~outgoing_df['called_number'].astype(str).str.startswith('91')]
     intl_counts = intl_calls.groupby('calling_number').size().reset_index(name='international_call_count')
     intl_suspects = intl_counts[intl_counts['international_call_count'] > intl_threshold]
@@ -78,10 +66,7 @@ def analyze_logic(df: pd.DataFrame, intl_threshold: int, spike_threshold: int):
     
     return intl_suspects, spike_suspects
 
-# ==========================================
 # 4. REPORT GENERATION (PDF)
-# ==========================================
-
 class PDFReport(FPDF):
     def header(self):
         self.set_font('Arial', 'B', 15)
@@ -166,12 +151,10 @@ def generate_pdf_report(file_name, intl_suspects, spike_suspects, settings):
     pdf.output(tmp_file.name)
     return tmp_file.name
 
-# ==========================================
 # 5. STREAMLIT INTERFACE (MAIN EXECUTION)
-# ==========================================
 
 def run_analysis():
-    st.title("📞 Outgoing Call Analysis")
+    st.title("Call Spike Analysis")
     st.markdown("---")
 
     # Initialize Session State
@@ -184,7 +167,7 @@ def run_analysis():
     uploaded_file = st.file_uploader("Upload CDR File (CSV/Excel)", type=["csv", "xlsx"], key='file_uploader')
 
     # -- Threshold Settings (Displayed only after/with file upload option) --
-    with st.expander("⚙️ Analysis Settings (Thresholds)", expanded=True):
+    with st.expander("Analysis Settings (Thresholds)", expanded=True):
         col1, col2 = st.columns(2)
         with col1:
             intl_thresh = st.number_input("Max Allowed Int'l Calls", min_value=1, value=5, step=1)
@@ -193,9 +176,6 @@ def run_analysis():
 
     # -- Execution Logic --
     if uploaded_file is not None:
-        # Trigger analysis if file changes OR if thresholds change
-        # (Note: In Streamlit, a button is often safer to prevent constant re-running, 
-        # but here we follow the existing pattern of auto-running on interaction)
         st.session_state.uploaded_file = uploaded_file
         
         try:
@@ -225,14 +205,14 @@ def run_analysis():
         st.write("----")
         
         # Part 1: International
-        st.subheader("🌍 Excessive International Calls")
+        st.subheader("Excessive International Calls")
         if st.session_state.intl_suspects.empty:
             st.info("No suspects found matching criteria.")
         else:
             st.dataframe(st.session_state.intl_suspects, use_container_width=True)
 
         # Part 2: Spikes
-        st.subheader("📈 Hourly Call Spikes")
+        st.subheader("Hourly Call Spikes")
         if st.session_state.spike_suspects.empty:
             st.info("No call spikes detected.")
         else:
@@ -246,7 +226,7 @@ def run_analysis():
         if st.session_state.pdf_path and os.path.exists(st.session_state.pdf_path):
             with open(st.session_state.pdf_path, "rb") as f:
                 st.download_button(
-                    label="📄 Download Detailed PDF Report",
+                    label="Download Detailed PDF Report",
                     data=f,
                     file_name="CDR_Outgoing_Analysis_Report.pdf",
                     mime="application/pdf"
