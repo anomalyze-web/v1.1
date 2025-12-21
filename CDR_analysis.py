@@ -1,9 +1,11 @@
 import streamlit as st
 import os
+import sys
+import importlib.util
 from streamlit_extras.stylable_container import stylable_container
 
 def show_cdr_analysis(case_number, investigator_name, case_name, remarks, username="Investigate"):
-    # --- Fully remove spacing ---
+    
     st.markdown("""
         <style>
         [data-testid="stSidebar"] { display: none !important; }
@@ -42,7 +44,6 @@ def show_cdr_analysis(case_number, investigator_name, case_name, remarks, userna
         </style>
     """, unsafe_allow_html=True)
 
-    # Layout: sidebar and main content
     col_sidebar, col_main = st.columns([1, 5], gap="small")
 
     # --- SIDEBAR ---
@@ -85,7 +86,6 @@ def show_cdr_analysis(case_number, investigator_name, case_name, remarks, userna
         ]
 
         if 'selected_feature' not in st.session_state:
-            # Case Info Header Card: Background color changed to #2f6690
             st.markdown(f"""
                 <div style='background-color:#2f6690;padding:20px 36px 16px 36px;border-radius:16px 16px 0 0;margin-bottom:1.5rem;'>
                     <div style='flex:1;'>
@@ -99,7 +99,6 @@ def show_cdr_analysis(case_number, investigator_name, case_name, remarks, userna
             st.markdown("## CDR Analysis")
             st.markdown("#### Select a feature to begin analysis")
 
-            # Feature cards (3 per row)
             cols = st.columns(3)
             for idx, feature in enumerate(features):
                 with cols[idx % 3]:
@@ -138,20 +137,40 @@ def show_cdr_analysis(case_number, investigator_name, case_name, remarks, userna
                 st.markdown(f"**Case Remarks:** {remarks}")
 
         else:
-            # --- FEATURE EXECUTION ---
+            # --- FEATURE EXECUTION ENGINE
             selected = st.session_state.selected_feature
-            feature_path = os.path.join("pages", "cdr_pages", f"{selected}.py")
-            st.markdown(f"## {selected.replace('_', ' ')} Analysis")
+            
+            # 1. Back Button Header
+            col_head_1, col_head_2 = st.columns([5, 1])
+            with col_head_2:
+                 if st.button("⬅️ Back", use_container_width=True):
+                    del st.session_state.selected_feature
+                    st.rerun()
+            
+            # 2. Dynamic Module Loading
+            module_name = f"pages.cdr_pages.{selected}"
+            
+            try:
+                if module_name in sys.modules:
+                    module = importlib.reload(sys.modules[module_name])
+                else:
+                    module = importlib.import_module(module_name)
 
-            if os.path.exists(feature_path):
-                try:
-                    with open(feature_path, "r") as f:
-                        exec(f.read(), globals())
-                except Exception as e:
-                    st.error(f"Error while executing {selected}: {e}")
-            else:
-                st.error(f"Feature file not found: {feature_path}")
+                # 3. Execution
+                if hasattr(module, "run_analysis"):
+                    module.run_analysis()
+                elif hasattr(module, "run"):
+                    module.run()
+                else:
+                    feature_path = os.path.join("pages", "cdr_pages", f"{selected}.py")
+                    if os.path.exists(feature_path):
+                        with open(feature_path, "r") as f:
+                            exec(f.read(), globals())
+                    else:
+                        st.error(f"Module loaded but no run function found, and file path missing: {feature_path}")
 
-            if st.button("⬅️ Back to CDR Feature Grid"):
-                del st.session_state.selected_feature
-                st.rerun()
+            except ModuleNotFoundError:
+                st.error(f"Module not found: {module_name}")
+                st.write(f"Ensure the file is located at `pages/cdr_pages/{selected}.py`")
+            except Exception as e:
+                st.error(f"⚠️ Error running module: {e}")
