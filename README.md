@@ -61,7 +61,7 @@ Anomalyze moves beyond static rule-based detection by employing ML models to cat
 ---
 
 ## Working Video
-[Click here to watch the video demo](https://drive.google.com/file/d/1yXVqtBrPK6BNLVQ63t3xly8E6VLGkYpn/view?usp=drive_link)
+[Click here to watch the video demo](https://drive.google.com/file/d/1PmLpwK8U2m0XPPx-MHyamrx2oKrUywXi/view?usp=sharing)
 
 ## Live Demo
 [Click here to check out Anomalyze](https://anomalyze.streamlit.app/)
